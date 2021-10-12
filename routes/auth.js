@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 // register
 
 router.post("/register", async (req, res) => {
-  console.log("test");
   try {
     const salt = await bcrypt.genSalt(10);
     const hasedPasswrod = await bcrypt.hash(req.body.password, salt);
