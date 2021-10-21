@@ -29,7 +29,6 @@
 }
 
 .postUsername {
-<<<<<<< HEAD
   font-size: 16px;
   font-weight: 500;
   margin: 0 10px;
@@ -38,15 +37,6 @@
 
 .postDate {
   font-size: 14px;
-=======
-  font-size: 15px;
-  font-weight: 500;
-  margin: 0 10px;
-}
-
-.postDate {
-  font-size: 12px;
->>>>>>> 42520e43df142fbd9514bf15e616dd6d6d412282
 }
 
 .postCenter {
