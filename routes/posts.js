@@ -73,13 +73,13 @@ router.get("/:id", async (req, res) => {
 // get timeline posts
 
 // ეს შესამოწმებელია თუ მუშაობს
-router.get("/timeline", async (req, res) => {
+router.get("/timeline/:userId", async (req, res) => {
   let PostArray = [];
 
   try {
-    const currentUser = await User.findById(req.body.userId);
+    const currentUser = await User.findById(req.params.userId);
 
-    const usePosts = await Post.find({ userId: currentUser._id });
+    const userPosts = await Post.find({ userId: currentUser._id });
 
     //  მეგობრების პოსტეს ვპოულობთ თაიმლაინისთვის
     const firendPosts = await Promise.all(
@@ -87,7 +87,7 @@ router.get("/timeline", async (req, res) => {
         Post.find({ userId: friendId });
       })
     );
-    res.json(userPosts.concat(...firendPosts));
+    res.status(200).json(userPosts.concat(...firendPosts));
   } catch (err) {
     res.status(500).json(err);
   }

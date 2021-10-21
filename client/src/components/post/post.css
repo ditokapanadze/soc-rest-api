@@ -29,13 +29,14 @@
 }
 
 .postUsername {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   margin: 0 10px;
+  font-weight: bold;
 }
 
 .postDate {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .postCenter {
