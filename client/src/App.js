@@ -1,4 +1,5 @@
 import Home from "./pages/home/Home";
+
 import "./App.css";
 import Profile from "./pages/profiel/Profile";
 import Login from "./pages/login/Login";
@@ -23,6 +24,6 @@ function App() {
       </Switch>
     </Router>
   );
-}
+  }
 
 export default App;

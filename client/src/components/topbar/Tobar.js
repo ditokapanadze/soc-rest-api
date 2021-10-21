@@ -1,15 +1,22 @@
 import "./topbar.css";
 import { Search, Person, Chat, Notifications } from "@material-ui/icons";
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
+=======
+>>>>>>> 42520e43df142fbd9514bf15e616dd6d6d412282
 
 export default function Topbar() {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
+<<<<<<< HEAD
         <Link to="/">
           {" "}
           <span className="logo">Lamasocial</span>
         </Link>
+=======
+        <span className="logo">Lamasocial</span>
+>>>>>>> 42520e43df142fbd9514bf15e616dd6d6d412282
       </div>
       <div className="topbarCenter">
         <div className="searchbar">
