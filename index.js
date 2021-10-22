@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ mongoose
   .catch((err) => console.log(err));
 
 //midlleware
+app.use(cors());
 
 app.use(express.json());
 app.use(helmet());

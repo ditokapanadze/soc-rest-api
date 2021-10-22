@@ -75,6 +75,10 @@
   border-radius: 10px;
   background-color: #42b72a;
   border: none;
+
   color: white;
   font-size: 20px;
+}
+.loginButton:disabled {
+  cursor: not-allowed;
 }
