@@ -12,8 +12,10 @@ export default function Post({ post }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const likeHandler = () => {
-    setLike(isLiked ? like - 1 : like + 1);
-    setIsLiked(!isLiked);
+    try {
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -38,7 +40,11 @@ export default function Post({ post }) {
             <Link to={`/profile/${user.username}`}>
               <img
                 className="postProfileImg"
-                src={user.profilePicture || PF + "person/noAvatar.png"}
+                src={
+                  user.profilePicture
+                    ? PF + user.profilePicture
+                    : PF + "person/noAvatar.png"
+                }
                 alt=""
               />
             </Link>

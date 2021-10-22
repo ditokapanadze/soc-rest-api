@@ -1,6 +1,46 @@
-import React from "react";
+import axios from "axios";
+
+import React, { useContext, useState, useRef } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { useHistory } from "react-router-dom";
 import "./register.css";
+
 function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repassword, setRepassword] = useState("");
+  const [username, setUsername] = useState("");
+  const passwordRef = useRef();
+  const { user, isFetching, error, dispatch } = useContext(AuthContext);
+
+  const history = useHistory();
+
+  const handleClick = async (e) => {
+    console.log(password);
+    console.log(repassword);
+    e.preventDefault();
+    if (password !== repassword) {
+      passwordRef.current.setCustomValidity("passwords don't match");
+    } else {
+      const user = {
+        username,
+        password,
+        email,
+      };
+      console.log(user);
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/auth/register",
+          user
+        );
+        console.log(res);
+        history.push("/login");
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <div className="login">
       <div className="loginWrapper">
@@ -11,23 +51,42 @@ function Register() {
           </span>
         </div>
         <div className="loginRight">
-          <div className="registerBox">
-            <input type="text" placeholder="Username" className="loginInput" />
-            <input type="email" placeholder="Email" className="loginInput" />
+          <form className="registerBox" onSubmit={handleClick}>
             <input
-              type="password"
-              placeholder="Repeat Password"
+              required
+              type="text"
+              placeholder="Username"
               className="loginInput"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              required
+              type="email"
+              placeholder="Email"
+              className="loginInput"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              ref={passwordRef}
+              required
+              minLength="6"
+              type="password"
+              placeholder="Password"
+              className="loginInput"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <input
               type="password"
-              placeholder=" password"
+              required
+              placeholder="Repeat password"
               className="loginInput"
+              onChange={(e) => setRepassword(e.target.value)}
             />
-            <button className="loginButton">Sign Up</button>
-
+            <button className="loginButton" type="submit">
+              Sign Up
+            </button>
             <button className="loginRegisterButton">Log into acount</button>
-          </div>
+          </form>
         </div>
       </div>
     </div>

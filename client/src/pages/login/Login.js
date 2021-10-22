@@ -44,7 +44,7 @@ function Login() {
               className="loginInput"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button className="loginButton" disabled={isFatching}>
+            <button className="loginButton" disabled={isFatching} type="submit">
               {isFatching ? (
                 <CircularProgress style={{ color: "white" }} />
               ) : (

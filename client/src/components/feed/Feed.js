@@ -1,11 +1,13 @@
 import Post from "../post/Post";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Share from "../share/Share";
 import "./feed.css";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Feed({ username }) {
   const [posts, setPosts] = useState([]);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,7 +17,7 @@ export default function Feed({ username }) {
               "http://localhost:5000/api/posts/profile/" + username
             )
           : await axios.get(
-              "http://localhost:5000/api/posts/timeline/616508750294372f3b502ec5"
+              "http://localhost:5000/api/posts/timeline/" + user._id
             );
         setPosts(res.data);
       } catch (err) {
@@ -23,7 +25,7 @@ export default function Feed({ username }) {
       }
     };
     fetchPosts();
-  }, [username]);
+  }, [username, user._id]);
   return (
     <div className="feed">
       <div className="feedWrapper">

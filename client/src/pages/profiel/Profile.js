@@ -49,7 +49,7 @@ function Profile() {
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed user="jane" />
+            <Feed username="jane" />
             <Rightbar user={user} />
           </div>
         </div>
