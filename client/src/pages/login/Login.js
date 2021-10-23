@@ -3,15 +3,17 @@ import "./login.css";
 import { loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 import { CircularProgress } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user, isFatching, error, dispatch } = useContext(AuthContext);
-
+  let history = useHistory();
   const handleClick = (e) => {
     e.preventDefault();
     loginCall({ email, password }, dispatch);
+    history.push("/");
   };
 
   console.log(user);
@@ -48,7 +50,7 @@ function Login() {
               {isFatching ? (
                 <CircularProgress style={{ color: "white" }} />
               ) : (
-                "Login In"
+                "Log In"
               )}
             </button>
             <span className="loginForgot">Forgot Password? </span>

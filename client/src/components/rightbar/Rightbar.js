@@ -16,7 +16,7 @@ export default function Rightbar({ user }) {
 
   // ვამოწმებს ფლოლოუერებში გვყავს თუ არა ეს პროფილი რო მაგის მიხედვით ფოლოუ და ანფოლოა ღილაკი დარენდერდეს
   useEffect(() => {
-    setFollowed(currentUser.following.includes(user?._id));
+    setFollowed(currentUser?.following?.includes(user?._id));
   }, [user?._id]);
 
   console.log("followed");
@@ -41,13 +41,13 @@ export default function Rightbar({ user }) {
     try {
       if (followed) {
         const res = await axios.put(
-          `http://localhost:5000/api/users/${user._id}/unfollow`,
+          `http://localhost:5000/api/users/${user?._id}/unfollow`,
           { userId: currentUser._id }
         );
         console.log(res.data);
       } else {
         const res = await axios.put(
-          `http://localhost:5000/api/users/${user._id}/follow`,
+          `http://localhost:5000/api/users/${user?._id}/follow`,
           { userId: currentUser._id }
         );
         console.log(res.data);

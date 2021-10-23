@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // register
 
@@ -14,7 +15,12 @@ router.post("/register", async (req, res) => {
       password: hasedPasswrod,
     });
     const user = await newUser.save();
-    res.status(200).json(user);
+
+    const token = jwt.sign({ user: user._id }, process.env.TOKEN_SECRET, {
+      expiresIn: "2h",
+    });
+
+    res.status(200).json({ res: user, token });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -33,8 +39,14 @@ router.post("/login", async (req, res) => {
       user.password
     );
     !validPassword && res.status(400).json("wrong password");
-
-    res.status(200).json(user);
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      process.env.TOKEN_SECRET,
+      {
+        expiresIn: "2h",
+      }
+    );
+    res.status(200).json({ user, token });
   } catch (err) {
     res.status(500).json(err);
   }

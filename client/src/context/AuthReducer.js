@@ -7,6 +7,7 @@ const AuthReducer = (state, action) => {
         error: false,
       };
     case "LOGIN_SUCCESS":
+      console.log(action.payload);
       return {
         user: action.payload,
         isFatching: false,
@@ -18,6 +19,9 @@ const AuthReducer = (state, action) => {
         isFatching: false,
         error: action.payload,
       };
+    case "GET_USER":
+      console.log(action.payload);
+      return { user: action.payload, isFatching: false, error: false };
     case "FOLLOW":
       return {
         ...state,

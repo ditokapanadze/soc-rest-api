@@ -2,11 +2,7 @@ import { createContext, useEffect, useReducer } from "react";
 import AuthReducer from "./AuthReducer";
 
 const INITIAL_STATE = {
-  user: {
-    username: "dito",
-    _id: "616508750294372f3b502ec5",
-    following: ["616508750294372f3b502ec5"],
-  },
+  user: null,
   isFatching: false,
   error: false,
 };

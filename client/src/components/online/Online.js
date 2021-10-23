@@ -7,13 +7,13 @@ export default function Online({ user }) {
       <div className="rightbarProfileImgContainer">
         <img
           className="rightbarProfileImg"
-          src={PF + user.profilePicture}
+          src={PF + user?.profilePicture}
           alt=""
         />
 
         <span className="rightbarOnline"></span>
       </div>
-      <span className="rightbarUsername">{user.username}</span>
+      <span className="rightbarUsername">{user?.username}</span>
     </li>
   );
 }

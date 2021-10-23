@@ -46,14 +46,14 @@ export default function Share() {
           <img
             className="shareProfileImg"
             src={
-              user.profilePicture
-                ? PF + user.profilePectrue
+              user?.profilePicture
+                ? PF + user?.profilePectrue
                 : PF + "person/noAvatar.png"
             }
             alt=""
           />
           <input
-            placeholder={`What's in your mind ${user.username}?`}
+            placeholder={`What's in your mind ${user?.username}?`}
             className="shareInput"
             onChange={(e) => setDesc(e.target.value)}
           />
