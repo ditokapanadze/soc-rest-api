@@ -35,11 +35,19 @@ function Profile() {
           <div className="profileRightTop">
             <div className="profileCover">
               <img
-                src={user.coverPicture || PF + "person/noCover.png"}
+                src={
+                  user.coverPicture
+                    ? PF + user.coverPicture
+                    : PF + "person/noCover.png"
+                }
                 className="profileCoverImg"
               />
               <img
-                src={user.profilePicture || PF + "person/noAvatar.png"}
+                src={
+                  user.profilePicture
+                    ? user.profilePicture
+                    : PF + "person/noAvatar.png"
+                }
                 className="profileUserImg"
               />
             </div>
@@ -49,7 +57,7 @@ function Profile() {
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed username="jane" />
+            <Feed username={username} />
             <Rightbar user={user} />
           </div>
         </div>

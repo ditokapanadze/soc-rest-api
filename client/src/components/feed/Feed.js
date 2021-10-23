@@ -8,7 +8,8 @@ import { AuthContext } from "../../context/AuthContext";
 export default function Feed({ username }) {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
-
+  console.log(user);
+  console.log(username);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -19,7 +20,11 @@ export default function Feed({ username }) {
           : await axios.get(
               "http://localhost:5000/api/posts/timeline/" + user._id
             );
-        setPosts(res.data);
+        setPosts(
+          res.data((x, y) => {
+            return new Date(y.createdAt) - new Date(x.createdAt); //პოსტებს ალაგებს დრპის მიხედვით, ფიდი რო ახლები ზემოთ იყოს
+          })
+        );
       } catch (err) {
         console.log(err);
       }
@@ -29,7 +34,8 @@ export default function Feed({ username }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        <Share />
+        {!username || username === user.username ? <Share /> : ""}
+
         {posts.map((p) => (
           <Post key={p._id} post={p} />
         ))}

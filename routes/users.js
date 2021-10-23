@@ -78,6 +78,7 @@ router.put("/:id/follow", async (req, res) => {
     res.status(403).json("You can't follow yourself");
   }
 });
+//  unfollow user
 router.put("/:id/unfollow", async (req, res) => {
   console.log("test");
   if (req.body.userId !== req.params.id) {
@@ -99,5 +100,27 @@ router.put("/:id/unfollow", async (req, res) => {
   }
 });
 
-//ufollow a user
+// get friends
+
+router.get("/friends/:userId", async (req, res) => {
+  // შესამოწმებელია ეს ფუნქცია
+  try {
+    const user = await User.findById(req.params.userId);
+    // ფოლოუერებში მარტო აიდი გვაქ შენახული, ამიტო ჯერ უნდა მოვძებნოთ ყველა ფოლოუერის აიდი და მაგ აიდებით მოვძებნოთ მერე ეგ იუზერებო რო სახელი და პროფილი ფოტოები ამოვიღოთ
+    const friends = await Promise.all(
+      user.following.map((friendId) => {
+        return User.findById(friendId);
+      })
+    );
+    let friendList = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      friendList.push({ _id, username, profilePicture });
+      res.status(200).json(friendList);
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 module.exports = router;

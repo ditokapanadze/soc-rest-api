@@ -1,23 +1,36 @@
 import "./post.css";
 import { MoreVert } from "@material-ui/icons";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { format } from "timeago.js";
 import { Link } from "react-router-dom";
-
+import { AuthContext } from "../../context/AuthContext";
 export default function Post({ post }) {
   const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
   const [user, setUser] = useState({});
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
-  const likeHandler = () => {
+  const { user: currentUser } = useContext(AuthContext);
+
+  //  ამოწმებს ქურენთ იუზერს უკვე ხომ არ ქვს დალაიქებული
+  useEffect(() => {
+    setIsLiked(post.likes.includes(currentUser._id));
+  }, [currentUser._id, post.likes]);
+
+  const likeHandler = async () => {
     try {
+      const res = await axios.put(
+        `http://localhost:5000/api/posts/${post._id}/like`,
+        { userId: currentUser._id }
+      );
+      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
   };
 
+  // პოსტის ავტორის აიდით მოგვაქ პოსტის ავტორის სხვა მონაცემები
   useEffect(() => {
     const fetchUser = async () => {
       try {
