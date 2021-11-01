@@ -13,7 +13,7 @@ export default function Rightbar({ user }) {
   const [followed, setFollowed] = useState(false);
 
   const { user: currentUser } = useContext(AuthContext);
-
+  console.log(currentUser);
   // ვამოწმებს ფლოლოუერებში გვყავს თუ არა ეს პროფილი რო მაგის მიხედვით ფოლოუ და ანფოლოა ღილაკი დარენდერდეს
   useEffect(() => {
     setFollowed(currentUser?.following?.includes(user?._id));
@@ -81,7 +81,7 @@ export default function Rightbar({ user }) {
   const ProfileRightbar = () => {
     return (
       <>
-        {user.username !== currentUser.username ? (
+        {user?.username !== currentUser?.username ? (
           <button className="rightbarFollowbutton" onClick={handleFollow}>
             {followed ? "Unfollow" : "Follow"}
             {followed ? <Remove /> : <Add />}

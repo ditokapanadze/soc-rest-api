@@ -20,10 +20,10 @@ function App() {
   const { user, dispatch } = useContext(AuthContext);
   useEffect(() => {
     console.log("asd");
-    // getUser(dispatch);
+    getUser(dispatch);
   }, []);
-  console.log("user");
   console.log(user);
+  user === null ? console.log("aris") : console.log("Ara");
 
   return (
     // <Router>
@@ -43,17 +43,20 @@ function App() {
     // </Router>
     <Router>
       <Switch>
-        <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
+        {/* <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route> */}
 
         <Route path="/register">
           <Register />
         </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/profile/:username">
+
+        <Route path="/login">{token ? <Redirect to="/" /> : <Login />}</Route>
+
+        {/* <Route path="/login">{token ? <Login /> : <Redirect to="/" />}</Route> */}
+
+        <PrivateRoute path="/profile/:username" component={Profile} />
+        {/* <Route path="/profile/:username">
           <Profile />
-        </Route>
+        </Route> */}
         <PrivateRoute path="/" component={Home} />
       </Switch>
     </Router>

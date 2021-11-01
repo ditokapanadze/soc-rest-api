@@ -13,6 +13,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       console.log(new Date().getTime());
 
       if (exp * 1000 < new Date().getTime()) {
+        localStorage.removeItem("token");
         return false;
       } else {
         return true;
