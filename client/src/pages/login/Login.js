@@ -16,7 +16,7 @@ function Login() {
     history.push("/");
   };
 
-  console.log(user);
+  console.log(error);
 
   return (
     <div className="login">
@@ -38,6 +38,7 @@ function Login() {
               className="loginInput"
               onChange={(e) => setEmail(e.target.value)}
             />
+            <span style={{ color: "red", fontSize: "22px" }}> {error}</span>
             <input
               required
               type="password"
@@ -54,14 +55,17 @@ function Login() {
               )}
             </button>
             <span className="loginForgot">Forgot Password? </span>
-            <button className="loginRegisterButton">
+            <div
+              className="loginRegisterButton"
+              onClick={() => history.push("/register")}
+            >
               {" "}
               {isFatching ? (
                 <CircularProgress style={{ color: "white" }} />
               ) : (
                 "Create a new account"
               )}
-            </button>
+            </div>
           </form>
         </div>
       </div>

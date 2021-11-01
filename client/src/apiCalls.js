@@ -14,7 +14,9 @@ export const loginCall = async (userCredentials, dispatch) => {
 
     dispatch({ type: "LOGIN_SUCCESS", payload: user });
   } catch (err) {
-    dispatch({ type: "LOGIN_FAILURE", payload: err });
+    console.log(err.response.data.message);
+    console.log(err);
+    dispatch({ type: "LOGIN_FAILURE", payload: err.response.data.message });
   }
 };
 

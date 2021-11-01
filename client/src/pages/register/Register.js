@@ -85,7 +85,12 @@ function Register() {
             <button className="loginButton" type="submit">
               Sign Up
             </button>
-            <button className="loginRegisterButton">Log into acount</button>
+            <div
+              className="loginRegisterButton"
+              onClick={() => history.push("/login")}
+            >
+              Log into account
+            </div>
           </form>
         </div>
       </div>

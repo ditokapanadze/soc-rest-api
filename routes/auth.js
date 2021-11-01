@@ -32,13 +32,21 @@ router.post("/login", async (req, res) => {
   console.log(req.body);
   try {
     const user = await User.findOne({ email: req.body.email });
-    !user && res.status(404).json("user not found");
 
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    !validPassword && res.status(400).json("wrong password");
+    if (!user) {
+      console.log("esaa");
+      return res.status(404).json({ message: "user not found" });
+    } else if (user) {
+      const validPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+
+      if (!validPassword) {
+        return res.status(400).json({ message: "wrong password" });
+      }
+    }
+
     const token = jwt.sign(
       { userId: user._id, username: user.username },
       process.env.TOKEN_SECRET,
