@@ -18,3 +18,9 @@ export const unfollow = (userId) => ({
   type: "UNFOLLOW",
   payload: userId,
 });
+export const logout = () => ({
+  type: "LOG_OUT",
+});
+export const register = () => ({
+  type: "REGISTER",
+});

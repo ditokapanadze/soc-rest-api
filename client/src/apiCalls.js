@@ -21,17 +21,34 @@ export const loginCall = async (userCredentials, dispatch) => {
 };
 
 export const getUser = async (dispatch) => {
+  console.log("asasasasasasasasas");
   try {
     const token = localStorage.getItem("token");
+
     const { userId } = await decode(token);
-    console.log(userId);
-    console.log("userId");
+
     const res = await axios.get(
       `http://localhost:5000/api/users/?userId=${userId}`
     );
-    console.log(res.data);
+
     dispatch({ type: "GET_USER", payload: res.data });
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const register = async (user, dispatch) => {
+  dispatch({ type: "LOGIN_START" });
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/auth/register",
+      user
+    );
+    localStorage.setItem("token", res.data.token);
+    console.log(res.data.user);
+    console.log(res.data);
+    dispatch({ type: "REGISTER", payload: res.data });
+  } catch (err) {
+    dispatch({ type: "LOGIN_FAILURE", payload: err.response.data.message });
   }
 };

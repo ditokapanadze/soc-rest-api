@@ -3,6 +3,7 @@ import "./App.css";
 import Profile from "./pages/profiel/Profile";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
+import decode from "jwt-decode";
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,6 +14,7 @@ import {
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
 import PrivateRoute from "./routing/PrivateRoute";
+import { HideRoute } from "./routing/PrivateRoute";
 import { getUser } from "./apiCalls";
 
 function App() {
@@ -22,41 +24,45 @@ function App() {
     console.log("asd");
     getUser(dispatch);
   }, []);
-  console.log(user);
-  user === null ? console.log("aris") : console.log("Ara");
 
+  const chekcToken = () => {
+    if (!token) {
+      return false;
+    }
+    const { exp } = decode(token);
+    console.log(exp);
+    console.log(new Date().getTime());
+    try {
+      const { exp } = decode(token);
+      console.log(exp);
+      console.log(new Date().getTime());
+
+      if (exp * 1000 < new Date().getTime()) {
+        localStorage.removeItem("token");
+        return false;
+      } else {
+        return true;
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+  console.log(user);
   return (
-    // <Router>
-    //   <Switch>
-    //     {/* <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route> */}
-    //     <Route path="/login">
-    //       <Login />
-    //     </Route>
-    //     <Route path="/register">
-    //       <Register />
-    //     </Route>
-    //     <Route path="/profile/:username">
-    //       <Profile />
-    //     </Route>
-    //     <PrivateRoute path="/" component={Home} />
-    //   </Switch>
-    // </Router>
     <Router>
       <Switch>
-        {/* <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route> */}
-
-        <Route path="/register">
-          <Register />
-        </Route>
-
-        <Route path="/login">{token ? <Redirect to="/" /> : <Login />}</Route>
-
-        {/* <Route path="/login">{token ? <Login /> : <Redirect to="/" />}</Route> */}
+        {/* <Route path="/login">
+          {chekcToken() ? <Redirect to="/" /> : <Login />}
+        </Route> */}
+        <HideRoute path="/login" component={Login} />
+        <HideRoute path="/regiter" component={Register} />
+        {/* <Route path="/register">
+          {chekcToken() ? <Redirect to="/" /> : <Register />}
+        </Route> */}
 
         <PrivateRoute path="/profile/:username" component={Profile} />
-        {/* <Route path="/profile/:username">
-          <Profile />
-        </Route> */}
+
         <PrivateRoute path="/" component={Home} />
       </Switch>
     </Router>

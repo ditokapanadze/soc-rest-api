@@ -6,20 +6,18 @@ import Online from "../online/Online";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Add, Remove } from "@material-ui/icons";
-
+import { getUser } from "../../apiCalls";
 export default function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
-  const [followed, setFollowed] = useState(false);
+  const [followed, setFollowed] = useState();
 
-  const { user: currentUser } = useContext(AuthContext);
-  console.log(currentUser);
+  const { user: currentUser, dispatch } = useContext(AuthContext);
+
   // ვამოწმებს ფლოლოუერებში გვყავს თუ არა ეს პროფილი რო მაგის მიხედვით ფოლოუ და ანფოლოა ღილაკი დარენდერდეს
   useEffect(() => {
     setFollowed(currentUser?.following?.includes(user?._id));
   }, [user?._id]);
-
-  console.log("followed");
 
   useEffect(() => {
     const getFriends = async () => {
@@ -39,25 +37,25 @@ export default function Rightbar({ user }) {
 
   const handleFollow = async () => {
     try {
-      if (followed) {
+      if (user?.followers.includes(currentUser?._id)) {
         const res = await axios.put(
           `http://localhost:5000/api/users/${user?._id}/unfollow`,
           { userId: currentUser._id }
         );
-        console.log(res.data);
+        getUser(dispatch);
       } else {
         const res = await axios.put(
           `http://localhost:5000/api/users/${user?._id}/follow`,
           { userId: currentUser._id }
         );
-        console.log(res.data);
+        getUser(dispatch);
       }
     } catch (err) {
       console.log(err);
     }
     setFollowed(!followed);
   };
-
+  console.log(currentUser);
   const HomeRightbar = () => {
     return (
       <>

@@ -2,8 +2,13 @@
   display: flex;
   align-items: center;
   margin-bottom: 15px;
-}
 
+  transition: 0.2s ease;
+}
+.sidebarFriend:hover {
+  transform: scale(1.01);
+  backface-visibility: hidden;
+}
 .sidebarFriendImg {
   width: 32px;
   height: 32px;

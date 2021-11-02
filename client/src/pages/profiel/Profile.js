@@ -52,8 +52,11 @@ function Profile() {
               />
             </div>
             <div className="profileInfo">
-              <h4 className="prifileInfoName">{user.username}</h4>
-              <span className="prifileInfoDesc"> {user.desc}</span>
+              <h4 className="prifileInfoName">
+                {user?.username?.charAt(0).toUpperCase() +
+                  user?.username?.slice(1)}
+              </h4>
+              <span className="prifileInfoDesc"> {user?.desc}</span>
             </div>
           </div>
           <div className="profileRightBottom">

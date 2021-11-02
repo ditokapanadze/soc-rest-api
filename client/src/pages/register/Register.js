@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useContext, useState, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useHistory } from "react-router-dom";
+import { register } from "../../apiCalls";
 import "./register.css";
 
 function Register() {
@@ -14,7 +15,7 @@ function Register() {
   const { user, isFetching, error, dispatch } = useContext(AuthContext);
 
   const history = useHistory();
-
+  console.log(error);
   const handleClick = async (e) => {
     console.log(password);
     console.log(repassword);
@@ -27,17 +28,7 @@ function Register() {
         password,
         email,
       };
-      console.log(user);
-      try {
-        const res = await axios.post(
-          "http://localhost:5000/api/auth/register",
-          user
-        );
-        console.log(res);
-        history.push("/login");
-      } catch (err) {
-        console.log(err);
-      }
+      register(user, dispatch);
     }
   };
 
@@ -53,12 +44,15 @@ function Register() {
         <div className="loginRight">
           <form className="registerBox" onSubmit={handleClick}>
             <input
+              minLength="3"
+              maxLength="25"
               required
               type="text"
               placeholder="Username"
               className="loginInput"
               onChange={(e) => setUsername(e.target.value)}
             />
+            <span style={{ color: "Red", fontSize: "20px" }}> {error} </span>
             <input
               required
               type="email"

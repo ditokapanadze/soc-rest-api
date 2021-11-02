@@ -94,3 +94,89 @@
   object-fit: cover;
   cursor: pointer;
 }
+.profile__link {
+  position: relative;
+}
+.topbar__ul {
+  position: absolute;
+  color: black;
+
+  background-color: rgb(252, 248, 248);
+  padding: 20px 15px;
+  right: 20px;
+  width: 300px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.3);
+}
+
+.topbar__li {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 5px 10px 5px;
+
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+  font-size: 18px;
+}
+.topbar__li:first-child {
+  position: relative;
+  margin-bottom: 30px;
+}
+.topbar__li:first-child::before {
+  content: "";
+  width: 300px;
+  height: 1px;
+  right: 3px;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.3);
+  bottom: -10px;
+}
+.topbar__li p {
+  margin-left: 10px;
+}
+.topbar__li:hover {
+  background-color: rgb(233, 227, 227);
+}
+
+.popup__img {
+  height: 60px;
+  border-radius: 50%;
+}
+.profile__tooltip {
+  display: none;
+  top: 44px;
+  color: rgb(241, 235, 235);
+  right: 15px;
+  position: absolute;
+  background-color: rgb(66, 65, 65);
+  padding: 10px;
+  transition: all 1 ease;
+
+  font-size: 14px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.3);
+}
+/* 
+.profile__link:hover .profile__tooltip {
+  display: inline-block;
+} */
+.topbar__name {
+  font-weight: 600;
+}
+.topbar__name span {
+  font-weight: normal;
+  font-size: 16px;
+  color: rgb(100, 98, 98);
+}
+.topbarImg:hover ~ .profile__tooltip {
+  display: inline-block;
+}
+.sidebarFriendList p {
+  font-size: 18px;
+  padding-left: 2px;
+  margin-bottom: 10px;
+  color: rgb(59, 59, 59);
+  font-weight: 600;
+}

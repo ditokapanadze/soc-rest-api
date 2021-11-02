@@ -6,10 +6,23 @@ const AuthReducer = (state, action) => {
         isFatching: true,
         error: false,
       };
+    case "LOG_OUT":
+      return {
+        user: null,
+        isFatching: false,
+        error: false,
+      };
     case "LOGIN_SUCCESS":
       console.log(action.payload);
       return {
         user: action.payload,
+        isFatching: false,
+        error: false,
+      };
+    case "REGISTER":
+      console.log(action.payload.res);
+      return {
+        user: action.payload.res,
         isFatching: false,
         error: false,
       };

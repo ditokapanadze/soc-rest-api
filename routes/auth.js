@@ -6,6 +6,20 @@ const jwt = require("jsonwebtoken");
 // register
 
 router.post("/register", async (req, res) => {
+  console.log(req.body.email);
+
+  const checkUserName = await User.findOne({ username: req.body.username });
+
+  if (checkUserName) {
+    return res.status(400).json({ message: "Username is taken" });
+  }
+  const checkEmail = await User.findOne({ email: req.body.email });
+
+  if (checkEmail) {
+    return res
+      .status(400)
+      .json({ message: "Email already in use, did you forget the password?" });
+  }
   try {
     const salt = await bcrypt.genSalt(10);
     const hasedPasswrod = await bcrypt.hash(req.body.password, salt);
@@ -16,7 +30,7 @@ router.post("/register", async (req, res) => {
     });
     const user = await newUser.save();
 
-    const token = jwt.sign({ user: user._id }, process.env.TOKEN_SECRET, {
+    const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {
       expiresIn: "2h",
     });
 
@@ -34,7 +48,7 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      console.log("esaa");
+      console.log("esaan");
       return res.status(404).json({ message: "user not found" });
     } else if (user) {
       const validPassword = await bcrypt.compare(
