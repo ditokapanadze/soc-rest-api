@@ -16,6 +16,7 @@ import { AuthContext } from "./context/AuthContext";
 import PrivateRoute from "./routing/PrivateRoute";
 import { HideRoute } from "./routing/PrivateRoute";
 import { getUser } from "./apiCalls";
+import { register } from "./context/AuthActions";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -55,11 +56,11 @@ function App() {
         {/* <Route path="/login">
           {chekcToken() ? <Redirect to="/" /> : <Login />}
         </Route> */}
+
         <HideRoute path="/login" component={Login} />
-        <HideRoute path="/regiter" component={Register} />
-        {/* <Route path="/register">
-          {chekcToken() ? <Redirect to="/" /> : <Register />}
-        </Route> */}
+        <HideRoute path="/register" component={Register} />
+
+        {/* <Route path="/register">{<Register />}</Route> */}
 
         <PrivateRoute path="/profile/:username" component={Profile} />
 

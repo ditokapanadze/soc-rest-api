@@ -35,7 +35,12 @@ const AuthReducer = (state, action) => {
       };
     case "GET_USER":
       console.log(action.payload);
-      return { user: action.payload, isFatching: false, error: false };
+      return {
+        user: action.payload,
+        isFatching: false,
+        error: false,
+        largeMode: false,
+      };
     case "FOLLOW":
       return {
         ...state,
@@ -53,6 +58,12 @@ const AuthReducer = (state, action) => {
           ...state.user,
           following: [...state.user.following, action.payload],
         },
+      };
+    case "LARGEMODE":
+      console.log(state.largeMode);
+      return {
+        ...state,
+        user: {},
       };
     default:
       return state;

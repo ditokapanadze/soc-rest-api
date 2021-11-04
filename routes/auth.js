@@ -6,8 +6,6 @@ const jwt = require("jsonwebtoken");
 // register
 
 router.post("/register", async (req, res) => {
-  console.log(req.body.email);
-
   const checkUserName = await User.findOne({ username: req.body.username });
 
   if (checkUserName) {
@@ -43,12 +41,10 @@ router.post("/register", async (req, res) => {
 // login
 // აქ რაღაცა ურევს, გასაწორებელია
 router.post("/login", async (req, res) => {
-  console.log(req.body);
   try {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      console.log("esaan");
       return res.status(404).json({ message: "user not found" });
     } else if (user) {
       const validPassword = await bcrypt.compare(

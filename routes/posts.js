@@ -6,11 +6,10 @@ const auth = require("../verifyToken");
 
 router.post("/", async (req, res) => {
   const newPost = new Post(req.body);
-  console.log(req.body);
+
   try {
-    console.log("tryshi shemovida");
     const savedPost = await newPost.save();
-    console.log(savedPost);
+
     res.status(200).json(savedPost);
   } catch (err) {
     res.status(500).json(err);
@@ -49,11 +48,9 @@ router.delete("/:id", async (req, res) => {
 });
 // like a post
 router.put("/:id/like", async (req, res) => {
-  console.log(req.params.id);
-  console.log(req.body.userId);
   try {
     const post = await Post.findById(req.params.id);
-    console.log(post);
+
     if (!post.likes.includes(req.body.userId)) {
       await post.updateOne({ $push: { likes: req.body.userId } });
       res.status(200).json("The post hase been liked");
@@ -79,20 +76,23 @@ router.get("/:id", async (req, res) => {
 // ეს შესამოწმებელია თუ მუშაობს
 router.get("/timeline/:userId", async (req, res) => {
   let PostArray = [];
-
+  console.log("Tessdsdsd");
   try {
     const currentUser = await User.findById(req.params.userId);
 
-    const userPosts = await Post.find({ userId: currentUser._id });
-    console.log(userPosts);
+    const userPosts = await Post.find({ userId: currentUser._id }).sort({
+      createdAt: -1,
+    });
+
     //  მეგობრების პოსტეს ვპოულობთ თაიმლაინისთვის
     const friendPosts = await Promise.all(
       currentUser.following.map((friendId) => {
-        return Post.find({ userId: friendId });
+        return Post.find({ userId: friendId }).sort({
+          createdAt: -1,
+        });
       })
     );
 
-    console.log(userPosts.concat(...friendPosts));
     res.status(200).json(userPosts.concat(...friendPosts));
   } catch (err) {
     res.status(500).json(err);
@@ -103,8 +103,6 @@ router.get("/timeline/:userId", async (req, res) => {
 
 // ეს შესამოწმებელია თუ მუშაობს
 router.get("/profile/:username", async (req, res) => {
-  console.log(req.params.username);
-
   try {
     const user = await User.findOne({ username: req.params.username });
     const posts = await Post.find({ userId: user._id });

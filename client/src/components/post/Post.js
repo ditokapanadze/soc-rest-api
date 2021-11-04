@@ -5,18 +5,20 @@ import { useState, useEffect, useContext } from "react";
 import { format } from "timeago.js";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { largePost } from "../../apiCalls";
 export default function Post({ post }) {
   const [like, setLike] = useState(post.likes.length);
+  const [enlargeImg, setEnlargeImg] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [user, setUser] = useState({});
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
-  const { user: currentUser } = useContext(AuthContext);
+  const { user: currentUser, largeMode, dispatch } = useContext(AuthContext);
 
   //  ამოწმებს ქურენთ იუზერს უკვე ხომ არ ქვს დალაიქებული
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser._id));
-  }, [currentUser._id, post.likes]);
+  }, [currentUser?._id, post.likes]);
 
   const likeHandler = async () => {
     try {
@@ -24,18 +26,22 @@ export default function Post({ post }) {
         `http://localhost:5000/api/posts/${post._id}/like`,
         { userId: currentUser._id }
       );
-      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
   };
-
+  console.log(largeMode);
   // პოსტის ავტორის აიდით მოგვაქ პოსტის ავტორის სხვა მონაცემები
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users?userId=${post.userId}`
+          `http://localhost:5000/api/users?userId=${post.userId}`,
+          {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
         setUser(res.data);
       } catch (err) {
@@ -44,9 +50,14 @@ export default function Post({ post }) {
     };
     fetchUser();
   }, [post.userId]);
+  // სურათიანი პოსტის გახსნა
 
+  const openPost = () => {
+    setEnlargeImg(!enlargeImg);
+    largePost(dispatch);
+  };
   return (
-    <div className="post">
+    <div className={`post ${enlargeImg && "large_post"}`}>
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
@@ -70,7 +81,12 @@ export default function Post({ post }) {
         </div>
         <div className="postCenter">
           <span className="postText">{post?.desc}</span>
-          <img className="postImg" src={PF + post.img} alt="" />
+          <img
+            className="postImg"
+            onClick={openPost}
+            src={post.img}
+            alt="jhg"
+          />
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">

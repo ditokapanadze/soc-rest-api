@@ -18,6 +18,7 @@ export const AuthContextProvider = ({ children }) => {
         user: state.user,
         isFatching: state.isFatching,
         error: state.error,
+        largeMode: false,
         dispatch,
       }}
     >

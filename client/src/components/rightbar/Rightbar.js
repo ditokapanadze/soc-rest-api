@@ -25,7 +25,7 @@ export default function Rightbar({ user }) {
         const friendList = await axios.get(
           `http://localhost:5000/api/users/friends/${user._id}`
         );
-        console.log(friendList.data);
+        console.log(friendList);
         setFriends(friendList.data);
       } catch (err) {
         console.log(err);
@@ -34,7 +34,7 @@ export default function Rightbar({ user }) {
     getFriends();
     console.log("Test");
   }, [user]);
-
+  console.log(friends);
   const handleFollow = async () => {
     try {
       if (user?.followers.includes(currentUser?._id)) {
@@ -55,7 +55,7 @@ export default function Rightbar({ user }) {
     }
     setFollowed(!followed);
   };
-  console.log(currentUser);
+
   const HomeRightbar = () => {
     return (
       <>
@@ -75,7 +75,8 @@ export default function Rightbar({ user }) {
       </>
     );
   };
-
+  console.log(user?.username);
+  console.log(currentUser?.username);
   const ProfileRightbar = () => {
     return (
       <>
@@ -111,18 +112,20 @@ export default function Rightbar({ user }) {
         <h4 className="rightbarTitle">User friends</h4>
         <div className="rightbarFollowings">
           {friends.map((friend) => (
-            <Link to={`/profile/${friend.username}`}>
+            <Link to={`/profile/${friend?.username}`}>
               <div className="rightbarFollowing">
                 <img
                   src={
-                    friend.profilePicture
-                      ? PF + friend.profilePicture
+                    friend?.profilePicture
+                      ? PF + friend?.profilePicture
                       : PF + "person/noAvatar.png"
                   }
                   alt=""
                   className="rightbarFollowingImg"
                 />
-                <span className="rightbarFollowingName">{friend.username}</span>
+                <span className="rightbarFollowingName">
+                  {friend?.username}
+                </span>
               </div>
             </Link>
           ))}

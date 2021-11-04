@@ -11,12 +11,17 @@ function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [user, setUser] = useState({});
   const username = useParams().username;
-
+  console.log(username);
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users?username=${username}`
+          `http://localhost:5000/api/users?username=${username}`,
+          {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
         setUser(res.data);
       } catch (err) {

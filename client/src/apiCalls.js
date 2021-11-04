@@ -36,6 +36,20 @@ export const getUser = async (dispatch) => {
     console.log(err);
   }
 };
+// export const getUser = async (dispatch) => {
+//   const token = localStorage.getItem("token");
+//   try {
+//     const res = await axios.get(`http://localhost:5000/api/users`, {
+//       headers: {
+//         authorization: `Bearer ${token}`,
+//       },
+//     });
+//     console.log(res);
+//     dispatch({ type: "GET_USER", payload: res.data });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export const register = async (user, dispatch) => {
   dispatch({ type: "LOGIN_START" });
@@ -51,4 +65,9 @@ export const register = async (user, dispatch) => {
   } catch (err) {
     dispatch({ type: "LOGIN_FAILURE", payload: err.response.data.message });
   }
+};
+
+export const largePost = (dispatch) => {
+  console.log("apicalss");
+  dispatch({ type: "LARGEMODE" });
 };

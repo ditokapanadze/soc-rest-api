@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const verifyUser = require("../verifyToken");
 
 //update user
 
@@ -30,7 +31,6 @@ router.put("/:id", async (req, res) => {
 //delete user
 
 router.delete("/:id", async (req, res) => {
-  console.log(req.body.userId);
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     try {
       const user = await User.findByIdAndDelete({ _id: req.params.id });
@@ -45,13 +45,15 @@ router.delete("/:id", async (req, res) => {
 
 //get a user
 router.get("/", async (req, res) => {
-  console.group("test");
+  // const userId = req.config.userId;
+  // const username = req.config.username;
   const userId = req.query.userId;
   const username = req.query.username;
   try {
     const user = userId
       ? await User.findById(userId)
       : await User.findOne({ username: username });
+
     // პასვორდს და აფდეითის დროს ვაკლებთ იუზერს და დანარჩენ
     const { password, updatedAt, ...other } = user._doc;
     res.status(200).json(other);
@@ -81,7 +83,6 @@ router.put("/:id/follow", async (req, res) => {
 });
 //  unfollow user
 router.put("/:id/unfollow", async (req, res) => {
-  console.log("test");
   if (req.body.userId !== req.params.id) {
     try {
       const user = await User.findById(req.params.id);
@@ -104,24 +105,28 @@ router.put("/:id/unfollow", async (req, res) => {
 // get friends
 
 router.get("/friends/:userId", async (req, res) => {
-  // შესამოწმებელია ეს ფუნქცია
+  console.log(req.params.userId);
   try {
     const user = await User.findById(req.params.userId);
+
     // ფოლოუერებში მარტო აიდი გვაქ შენახული, ამიტო ჯერ უნდა მოვძებნოთ ყველა ფოლოუერის აიდი და მაგ აიდებით მოვძებნოთ მერე ეგ იუზერებო რო სახელი და პროფილი ფოტოები ამოვიღოთ
     const friends = await Promise.all(
       user.following.map((friendId) => {
         return User.findById(friendId);
       })
     );
+
     let friendList = [];
-    friends.map((friend) => {
-      const { _id, username, profilePicture } = friend;
-      friendList.push({ _id, username, profilePicture });
-      res.status(200).json(friendList);
-    });
+
+    // friends.map((friend) => {
+    //   consol.log(friend);
+    //   const { _id, username, profilePicture } = friend;
+    //   friendList.push({ _id, username, profilePicture });
+
+    // });
+    res.status(200).json(friends);
   } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
+    res.status(400).json(err);
   }
 });
 module.exports = router;

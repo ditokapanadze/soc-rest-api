@@ -22,6 +22,7 @@ const checkAuth = () => {
     return false;
   }
 };
+console.log(checkAuth());
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route

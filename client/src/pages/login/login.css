@@ -10,6 +10,7 @@
 .loginWrapper {
   width: 70%;
   height: 70%;
+  max-width: 1200px;
   display: flex;
 }
 
@@ -35,17 +36,21 @@
   font-size: 24px;
 }
 .loginBox {
+  width: 100%;
+  max-width: 500px;
   height: 330px;
   padding: 20px;
   background-color: white;
   border-radius: 10px;
   display: flex;
+
   flex-direction: column;
   justify-content: space-between;
 }
 
 .loginInput {
   height: 50px;
+
   border-radius: 10px;
   border: 1px solid grey;
   font-size: 18px;
@@ -58,6 +63,7 @@
   border: none;
   background-color: #1775ee;
   color: white;
+
   font-size: 20px;
   font-weight: 500;
 }

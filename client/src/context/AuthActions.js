@@ -24,3 +24,6 @@ export const logout = () => ({
 export const register = () => ({
   type: "REGISTER",
 });
+export const largemode = () => ({
+  type: "LARGEMODE",
+});

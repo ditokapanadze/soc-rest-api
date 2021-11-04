@@ -16,8 +16,6 @@ function Login() {
     history.push("/");
   };
 
-  console.log(error);
-
   return (
     <div className="login">
       <div className="loginWrapper">
