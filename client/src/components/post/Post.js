@@ -3,21 +3,21 @@ import { MoreVert } from "@material-ui/icons";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { format } from "timeago.js";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { largePost } from "../../apiCalls";
-export default function Post({ post }) {
-  const [like, setLike] = useState(post.likes.length);
+export default function Post({ post, large }) {
+  const [like, setLike] = useState(post?.likes?.length);
   const [enlargeImg, setEnlargeImg] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [user, setUser] = useState({});
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  let history = useHistory();
   const { user: currentUser, largeMode, dispatch } = useContext(AuthContext);
-
+  const { id } = useParams();
   //  ამოწმებს ქურენთ იუზერს უკვე ხომ არ ქვს დალაიქებული
   useEffect(() => {
-    setIsLiked(post.likes.includes(currentUser._id));
+    setIsLiked(post?.likes?.includes(currentUser._id));
   }, [currentUser?._id, post.likes]);
 
   const likeHandler = async () => {
@@ -30,8 +30,8 @@ export default function Post({ post }) {
       console.log(err);
     }
   };
-  console.log(largeMode);
-  // პოსტის ავტორის აიდით მოგვაქ პოსტის ავტორის სხვა მონაცემები
+  console.log(large);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -54,11 +54,23 @@ export default function Post({ post }) {
 
   const openPost = () => {
     setEnlargeImg(!enlargeImg);
-    largePost(dispatch);
   };
+
+  // useEffect(() => {
+  //   const fetchPost = async () => {
+  //     try {
+  //       const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+  //       console.log(res.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   fetchPost();
+  // }, [id]);
+
   return (
-    <div className={`post ${enlargeImg && "large_post"}`}>
-      <div className="postWrapper">
+    <div className={`post ${large ? "large_post" : ""}`}>
+      <div className={`postWrapper ${large ? "large_postWrapper" : ""}`}>
         <div className="postTop">
           <div className="postTopLeft">
             <Link to={`/profile/${user?.username}`}>
@@ -83,7 +95,7 @@ export default function Post({ post }) {
           <span className="postText">{post?.desc}</span>
           <img
             className="postImg"
-            onClick={openPost}
+            onClick={() => history.push(`/post/${post?._id}`)}
             src={post.img}
             alt="jhg"
           />

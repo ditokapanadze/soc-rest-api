@@ -1,14 +1,16 @@
 import Post from "../post/Post";
 import { useState, useEffect, useContext, useRef } from "react";
 import Share from "../share/Share";
+import { Link, useHistory, useParams } from "react-router-dom";
 import "./feed.css";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Feed({ username }) {
   const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState([]);
   const { user } = useContext(AuthContext);
-
+  const { id } = useParams();
   console.log(username);
   useEffect(() => {
     const fetchPosts = async () => {
@@ -33,17 +35,28 @@ export default function Feed({ username }) {
     };
     fetchPosts();
   }, [username, user]);
-  console.log(user);
-  console.log(username);
-  posts.map((p) => console.log(p));
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+        setPost(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPost();
+  }, [id]);
+  console.log(post);
   return (
     <div className="feed">
-      <div className="feedWrapper">
-        {!username || username === user?.username ? <Share /> : ""}
-
-        {posts.map((post) => (
-          <Post post={post} />
-        ))}
+      <div className={`feedWrapper ${id ? "largeWrapper" : ""}`}>
+        {(!username || username === user?.username) && !id ? <Share /> : ""}
+        {id ? (
+          <Post post={post} large={true} />
+        ) : (
+          posts.map((post) => <Post post={post} />)
+        )}
       </div>
     </div>
   );

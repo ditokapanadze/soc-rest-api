@@ -63,6 +63,7 @@ function App() {
         {/* <Route path="/register">{<Register />}</Route> */}
 
         <PrivateRoute path="/profile/:username" component={Profile} />
+        <PrivateRoute path="/post/:id" component={Home} />
 
         <PrivateRoute path="/" component={Home} />
       </Switch>
