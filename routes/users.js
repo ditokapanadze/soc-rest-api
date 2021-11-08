@@ -1,11 +1,14 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
 const verifyUser = require("../verifyToken");
 
 //update user
 
-router.put("/:id", async (req, res) => {
+router.put("/", async (req, res) => {
+  console.log(req.body);
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     if (req.body.password) {
       try {
@@ -27,7 +30,27 @@ router.put("/:id", async (req, res) => {
     return res.status(403).json("You can update only your account!");
   }
 });
-
+// avatar upload
+router.post(
+  "/changeavatar",
+  // verifyUser,
+  upload.single("file"),
+  async (req, res) => {
+    // const { userId } = req.config;
+    console.log(req.body);
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      console.log(result.secure_url);
+      const user = await User.findByIdAndUpdate("6173a24029384e3fac033fb2", {
+        profilePicture: result.secure_url,
+        cloudinary_id: result.public_id,
+      });
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 //delete user
 
 router.delete("/:id", async (req, res) => {

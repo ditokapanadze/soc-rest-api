@@ -12,6 +12,7 @@
 
 .profileCover {
   height: 320px;
+
   position: relative;
 }
 
@@ -49,4 +50,21 @@
   font-size: 14px;
   margin-top: 5px;
   margin-top: 5px;
+}
+.test {
+  background-color: aquamarine !important;
+}
+.add__photo__icon {
+  position: absolute;
+  left: 54%;
+  bottom: 10%;
+}
+.upload__tooltip {
+  position: absolute;
+  left: 55%;
+  padding: 5px;
+
+  border-radius: 5px;
+}
+.upload:hover {
 }
