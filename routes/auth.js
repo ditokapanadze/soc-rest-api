@@ -42,7 +42,11 @@ router.post("/register", async (req, res) => {
 // აქ რაღაცა ურევს, გასაწორებელია
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { online: true } },
+      { new: true }
+    );
 
     if (!user) {
       return res.status(404).json({ message: "user not found" });
@@ -70,4 +74,16 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// logout
+router.put("/logout/:id", async (req, res) => {
+  console.log(req.params.id);
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, {
+      online: false,
+    });
+    res.status(200).json({ message: " logout succesfull" });
+  } catch (err) {
+    console.log(err);
+  }
+});
 module.exports = router;

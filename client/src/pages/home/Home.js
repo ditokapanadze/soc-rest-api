@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       {id ? "" : <Topbar />}
-      <div className="homeContainer">
+      <div className={`homeContainer ${id ? "black" : ""} `}>
         {id ? "" : <Sidebar />}
         <Feed />
         {id ? "" : <Rightbar />}

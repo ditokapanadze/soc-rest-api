@@ -9,16 +9,24 @@ import { GoSignOut } from "react-icons/go";
 import { AiFillSetting } from "react-icons/ai";
 import { useHistory } from "react-router";
 import { logout } from "../../context/AuthActions";
-
+import axios from "axios";
+import decode from "jwt-decode";
 export default function Topbar() {
   const [showPopup, setShowPopup] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user, dispatch } = useContext(AuthContext);
   let history = useHistory();
-  const handleLogout = () => {
-    logout(dispatch);
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token");
+    const { userId } = await decode(token);
     localStorage.clear();
     history.push("/login");
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/auth/logout/${userId}`
+      );
+    } catch (err) {}
   };
 
   const ref = useRef();
