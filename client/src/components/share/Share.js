@@ -9,61 +9,52 @@ import Resizer from "react-image-file-resizer";
 
 export default function Share() {
   const [desc, setDesc] = useState("");
-  const [baseImage, setBaseImage] = useState("");
+  const [postImage, setPostImage] = useState("");
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  console.log(postImage);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newPost = {
-      userId: user._id,
-      desc,
-    };
+    let formData = new FormData();
 
-    if (baseImage) {
-      // const data = new FormData();
-      // const fileName = Date.now() + baseImage.name;
-      // data.append("file", baseImage);
-      // data.append("name", fileName);
-      newPost.img = baseImage;
-      console.log(newPost);
-      try {
-        const res = await axios.post(
-          "http://localhost:5000/api/upload",
-          newPost
-        );
-      } catch (err) {
-        console.log(err);
-      }
+    formData.append("userId", user._id);
+    formData.append("desc", desc);
+    formData.append("postImage", postImage);
+    // const newPost = {
+    //   userId: user._id,
+    //   desc,
+    // };
+    console.log(formData);
+    if (postImage) {
     }
     try {
-      const res = await axios.post("http://localhost:5000/api/posts", newPost);
+      const res = await axios.post("http://localhost:5000/api/posts", formData);
       window.location.reload(); // ეს დორებითია. კონტექსტი უნდა შევქმნა მერე და პოსტები სთეითად გავიტანო
     } catch (err) {
       console.log(err);
     }
   };
   // ფოტოს რესიზს ვაკეთებ, დიდი ფაილები არ ითვირთება
-  const resizeFile = (file) =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        1500,
-        1500,
-        "JPEG",
-        100,
-        0,
-        (uri) => {
-          resolve(uri);
-        },
-        "base64"
-      );
-    });
+  // const resizeFile = (file) =>
+  //   new Promise((resolve) => {
+  //     Resizer.imageFileResizer(
+  //       file,
+  //       1500,
+  //       1500,
+  //       "JPEG",
+  //       100,
+  //       0,
+  //       (uri) => {
+  //         resolve(uri);
+  //       },
+  //       "base64"
+  //     );
+  //   });
   const uploadImage = async (e) => {
     try {
       const file = e.target.files[0];
-      const image = await resizeFile(file);
-      setBaseImage(image);
+      // const image = await resizeFile(file);
+      setPostImage(file);
     } catch (err) {
       console.log(err);
     }
@@ -86,20 +77,12 @@ export default function Share() {
   //     };
   //   });
   // };
-  console.log(baseImage);
+
   return (
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">
-          <img
-            className="shareProfileImg"
-            src={
-              user?.profilePicture
-                ? PF + user?.profilePectrue
-                : PF + "person/noAvatar.png"
-            }
-            alt=""
-          />
+          <img className="shareProfileImg" src={user?.profilePicture} alt="" />
           <input
             placeholder={`What's in your mind ${user?.username}?`}
             className="shareInput"
@@ -107,17 +90,21 @@ export default function Share() {
           />
         </div>
         <hr className="shareHr" />
-        {baseImage ? (
+        {postImage ? (
           <div className="shareImgContainer">
-            <img className="imgPreview" src={baseImage} alt="ASd" />
-            <Cancel className="cancelBtn" onClick={() => setBaseImage(null)} />
+            <img
+              className="imgPreview"
+              src={postImage ? URL.createObjectURL(postImage) : ""}
+              alt="ASd"
+            />
+            <Cancel className="cancelBtn" onClick={() => setPostImage(null)} />
           </div>
         ) : (
           ""
         )}
         <form className="shareBottom" onSubmit={handleSubmit}>
           <div className="shareOptions">
-            <label htmlFor="file" className="shareOption">
+            <label htmlFor="postImage" className="shareOption">
               <PermMedia htmlColor="tomato" className="shareIcon" />
               <span className="shareOptionText">Photo or Video</span>
               {/* <FileBase64
@@ -132,8 +119,8 @@ export default function Share() {
               <input
                 style={{ display: "none" }}
                 type="file"
-                id="file"
-                name="file"
+                id="postImage"
+                name="postImage"
                 accept=".png, .jpeg, .jpg"
                 onChange={(e) => {
                   uploadImage(e);

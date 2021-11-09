@@ -2,15 +2,36 @@ const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
 const auth = require("../verifyToken");
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
 // create a post
 
-router.post("/", async (req, res) => {
-  const newPost = new Post(req.body);
+router.post("/", upload.single("postImage"), async (req, res) => {
+  // console.log(req);
 
+  const { userId } = req.body;
+  const { desc } = req.body;
+
+  console.log(userId);
   try {
-    const savedPost = await newPost.save();
-
-    res.status(200).json(savedPost);
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      const img = result.secure_url;
+      const newPost = new Post({
+        userId: userId,
+        desc: desc,
+        img: img,
+      });
+      const savedPost = await newPost.save();
+      res.status(200).json(savedPost);
+    } else {
+      const newPost = new Post({
+        userId: userId,
+        desc: desc,
+      });
+      const savedPost = await newPost.save();
+      res.status(200).json(savedPost);
+    }
   } catch (err) {
     res.status(500).json(err);
   }

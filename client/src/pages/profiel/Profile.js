@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import "./profile.css";
 import Topbar from "../../components/topbar/Tobar";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -6,32 +6,34 @@ import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { AddAPhotoOutlined } from "@material-ui/icons";
+import { AddAPhoto } from "@material-ui/icons";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Resizer from "react-image-file-resizer";
-
+import { getUser } from "../../apiCalls";
+import { AuthContext } from "../../context/AuthContext";
 function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [user, setUser] = useState({});
   const [baseImage, setBaseImage] = useState("");
   const username = useParams().username;
-  console.log(username);
+  const { dispatch } = useContext(AuthContext);
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/users?username=${username}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setUser(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:5000/api/users?username=${username}`,
-          {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        setUser(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     fetchUser();
   }, [username]);
 
@@ -64,12 +66,11 @@ function Profile() {
   };
   const uploadAvatar = async () => {
     const token = localStorage.getItem("token");
-    console.log(token);
     const avatar = baseImage;
+
     let formData = new FormData();
     formData.append("file", avatar);
     console.log(formData);
-    const test = { asda: "asd" };
     try {
       const res = await axios.post(
         "http://localhost:5000/api/users/changeavatar",
@@ -81,11 +82,14 @@ function Profile() {
           },
         }
       );
-      console.log(res.config.data);
+      setBaseImage("");
+      fetchUser();
+      getUser(dispatch);
     } catch (err) {
       console.log(err.response);
     }
   };
+  console.log(baseImage);
   return (
     <>
       <Topbar />
@@ -114,18 +118,21 @@ function Profile() {
               <label htmlFor="file">
                 {" "}
                 {baseImage ? (
-                  <>
+                  <div className="uploadicon__container">
                     <CloudUploadOutlinedIcon
                       className="add__photo__icon upload"
                       onClick={uploadAvatar}
                     />
                     <p className="upload__tooltip"> Click to upload</p>
-                  </>
+                  </div>
                 ) : (
-                  <AddAPhotoOutlined
-                    style={{ cursor: "pointer" }}
-                    className="add__photo__icon"
-                  />
+                  <div className="uploadicon__container">
+                    {" "}
+                    <AddAPhoto
+                      style={{ cursor: "pointer" }}
+                      className="add__photo__icon"
+                    />
+                  </div>
                 )}
                 <input
                   onChange={(e) => {

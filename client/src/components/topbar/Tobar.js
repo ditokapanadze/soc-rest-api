@@ -72,11 +72,7 @@ export default function Topbar() {
         <div className="profile__link">
           <img
             onClick={() => setShowPopup(!showPopup)}
-            src={
-              user?.profilePicture
-                ? PF + user?.profilePicture
-                : PF + "person/noAvatar.png"
-            }
+            src={user?.profilePicture}
             alt=""
             className="topbarImg"
           />
@@ -88,15 +84,7 @@ export default function Topbar() {
                 className="topbar__li"
               >
                 {" "}
-                <img
-                  src={
-                    user?.profilePicture
-                      ? PF + user?.profilePicture
-                      : PF + "person/noAvatar.png"
-                  }
-                  alt=""
-                  className="popup__img"
-                />
+                <img src={user?.profilePicture} alt="" className="popup__img" />
                 <p className="topbar__name">
                   {user?.username.charAt(0).toUpperCase() +
                     user?.username.slice(1)}{" "}

@@ -30,18 +30,19 @@ router.put("/", async (req, res) => {
     return res.status(403).json("You can update only your account!");
   }
 });
-// avatar upload
+
+// avatar upload, ცოტა ნელა მუშაობს ვერიფაიუზერის ფუნქციის გამო. შეილება ცოტა გამოსწორება.
 router.post(
   "/changeavatar",
-  // verifyUser,
+  verifyUser,
   upload.single("file"),
   async (req, res) => {
     // const { userId } = req.config;
-    console.log(req.body);
+    console.log(req.file.path);
     try {
       const result = await cloudinary.uploader.upload(req.file.path);
       console.log(result.secure_url);
-      const user = await User.findByIdAndUpdate("6173a24029384e3fac033fb2", {
+      const user = await User.findByIdAndUpdate(req.config.userId, {
         profilePicture: result.secure_url,
         cloudinary_id: result.public_id,
       });

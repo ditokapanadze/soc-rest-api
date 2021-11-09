@@ -49,7 +49,7 @@ export default function Post({ post, large }) {
       }
     };
     fetchUser();
-  }, [post.userId]);
+  }, [post.userId, currentUser]);
   // სურათიანი პოსტის გახსნა
 
   const openPost = () => {
@@ -76,11 +76,7 @@ export default function Post({ post, large }) {
             <Link to={`/profile/${user?.username}`}>
               <img
                 className="postProfileImg"
-                src={
-                  user?.profilePicture
-                    ? PF + user?.profilePicture
-                    : PF + "person/noAvatar.png"
-                }
+                src={user?.profilePicture}
                 alt=""
               />
             </Link>
