@@ -54,7 +54,7 @@ function Login() {
             </button>
             <span className="loginForgot">Forgot Password? </span>
             <div
-              className="loginRegisterButton"
+              className="loginRegisterButton new__btn"
               onClick={() => history.push("/register")}
             >
               {" "}

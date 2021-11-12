@@ -41,6 +41,7 @@ router.post("/register", async (req, res) => {
 // login
 // აქ რაღაცა ურევს, გასაწორებელია
 router.post("/login", async (req, res) => {
+  console.log("test");
   try {
     const user = await User.findOneAndUpdate(
       { email: req.body.email },

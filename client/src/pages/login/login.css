@@ -75,14 +75,17 @@
 
 .loginRegisterButton {
   margin: 0 auto;
-  width: 50%;
+  width: 100px;
   height: 50px;
   border-radius: 10px;
   background-color: #42b72a;
   border: none;
-
+  width: 700px;
   color: white;
   font-size: 20px;
+}
+.new__btn {
+  width: 100% !important;
 }
 .loginButton:disabled {
   cursor: not-allowed;
