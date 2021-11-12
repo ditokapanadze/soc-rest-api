@@ -163,13 +163,13 @@
 .coment__container {
   margin-bottom: 0;
   display: flex;
-
   padding: 10px;
 }
 .coment__content {
   margin-left: 10px;
   padding: 10px;
   width: 200px;
+  margin-bottom: 10px;
   border-radius: 20px;
   background-color: rgb(202, 204, 204, 0.3);
 }

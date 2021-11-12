@@ -113,7 +113,7 @@ router.get("/timeline/:userId", async (req, res) => {
     const userPosts = await Post.find({ userId: currentUser._id }).sort({
       createdAt: -1,
     });
-
+    // console.log(userPosts);
     //  მეგობრების პოსტეს ვპოულობთ თაიმლაინისთვის
     const friendPosts = await Promise.all(
       currentUser.following.map((friendId) => {
@@ -122,6 +122,7 @@ router.get("/timeline/:userId", async (req, res) => {
         });
       })
     );
+    console.log(userPosts.concat(...friendPosts));
 
     res.status(200).json(userPosts.concat(...friendPosts));
   } catch (err) {
@@ -133,12 +134,44 @@ router.get("/timeline/:userId", async (req, res) => {
 
 // ეს შესამოწმებელია თუ მუშაობს
 router.get("/profile/:username", async (req, res) => {
+  console.log("aqaa");
   try {
     const user = await User.findOne({ username: req.params.username });
     const posts = await Post.find({ userId: user._id });
+
+    console.log(posts);
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+// კომენტარის დამატება
+router.put("/comment/:id/:postId", async (req, res) => {
+  console.log(req.body.info);
+  const { commentText } = req.body.info;
+  const { user_name } = req.body.info;
+  const { user_profilePicture } = req.body.info;
+  console.log(commentText);
+  console.log(user_name);
+  console.log(user_profilePicture);
+  try {
+    const newPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $push: {
+          comments: {
+            text: commentText,
+            user_name,
+            user_profilePicture,
+          },
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json(newPost);
+  } catch (err) {
+    res.status(404).json(err);
   }
 });
 

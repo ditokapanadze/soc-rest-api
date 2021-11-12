@@ -1,5 +1,6 @@
 import "./post.css";
 import { MoreVert } from "@material-ui/icons";
+import Comments from "./Comments";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { format } from "timeago.js";
@@ -12,7 +13,7 @@ import { largePost } from "../../apiCalls";
 export default function Post({ post, large }) {
   const [like, setLike] = useState(post?.likes?.length);
   const [enlargeImg, setEnlargeImg] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState();
   const [singlePost, setSinglePost] = useState([]);
   const [user, setUser] = useState({});
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -21,24 +22,24 @@ export default function Post({ post, large }) {
   const { id } = useParams();
 
   // შეიძლება გამომდგეს
-
+  const fetchPost = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+      setSinglePost(res.data);
+      setLike(res.data.likes.length);
+    } catch (err) {
+      console.log(err.response);
+    }
+  };
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
-        setSinglePost(res.data);
-        setLike(res.data.likes.length);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchPost();
+    large && fetchPost();
   }, [id]);
   //  ამოწმებს ქურენთ იუზერს უკვე ხომ არ ქვს დალაიქებული
   useEffect(() => {
+    console.log("test");
     setIsLiked(post?.likes?.includes(currentUser?._id));
   }, [currentUser?._id, post?.likes]);
-
+  console.log(isLiked);
   const likeHandler = async () => {
     try {
       const res = await axios.put(
@@ -57,7 +58,6 @@ export default function Post({ post, large }) {
       console.log(err);
     }
   };
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -81,7 +81,19 @@ export default function Post({ post, large }) {
   const openPost = () => {
     setEnlargeImg(!enlargeImg);
   };
-  console.log(singlePost?.likes?.length);
+
+  const LikeText = () => {
+    console.log(like);
+    if (isLiked && like > 1) {
+      return (
+        <p className="postLikeCounter">you and {like - 1} people, like this</p>
+      );
+    } else if (isLiked && like === 1) {
+      return <p>you like this</p>;
+    }
+    return <p>be first to like this post</p>;
+  };
+
   return (
     <div className={`post ${large ? "large" : ""}`}>
       {!large ? (
@@ -112,7 +124,7 @@ export default function Post({ post, large }) {
                 onClick={likeHandler}
                 className={`likeIcon ${isLiked ? "liked" : ""}`}
               />
-              <p className="postLikeCounter">{like} people like it</p>
+              <LikeText />
             </div>
             <div className="postBottomRight">
               <span className="postCommentText">{post.comment} comments</span>
@@ -164,7 +176,7 @@ export default function Post({ post, large }) {
                     onClick={likeHandler}
                     className={`likeIcon ${isLiked ? "liked" : ""}`}
                   />
-                  <p className="postLikeCounter">{like} people like it</p>
+                  <LikeText />
                 </div>
               </div>
               <div className="postBottomRight">
@@ -173,51 +185,11 @@ export default function Post({ post, large }) {
                 </span>
               </div>
             </div>
-            <div className="larg__coment__container">
-              <div className="coment__container">
-                <img
-                  className="postProfileImg"
-                  src={user?.profilePicture}
-                  alt=""
-                />
-                <div className="coment__content">
-                  <span>dito kapanadze </span>
-                  <p>dsfs dsfsdfs s s dfdsf sdfsdf sdf d sdfsdf dsfsfds</p>
-                </div>
-              </div>
-              <div className="coment__container">
-                <img
-                  className="postProfileImg"
-                  src={user?.profilePicture}
-                  alt=""
-                />
-                <div className="coment__content">
-                  <span>dito kapanadze </span>
-                  <p>dsfs dsfsdfs s s dfdsf sdfsdf sdf d sdfsdf dsfsfds</p>
-                </div>
-              </div>
-              <div className="coment__container">
-                <img
-                  className="postProfileImg"
-                  src={user?.profilePicture}
-                  alt=""
-                />
-                <div className="coment__content">
-                  <span>dito kapanadze </span>
-                  <p>dsfs dsfsdfs s s dfdsf sdfsdf sdf d sdfsdf dsfsfds</p>
-                </div>
-              </div>
-              <div className="coment__container">
-                <img className="postProfileImg" src={user?.profilePicture} />
-                <div className="coment__content">
-                  <span>dito kapanadze </span>
-                  <p>dsfs dsfsdfs s s dfdsf sdfsdf sdf d sdfsdf dsfsfds</p>
-                </div>
-              </div>
-              <form className="comment__form">
-                <textarea placeholder="write a comment" />
-              </form>
-            </div>
+            <Comments
+              user={user}
+              singlePost={singlePost}
+              fetchPost={fetchPost}
+            />
           </div>
         </div>
       )}

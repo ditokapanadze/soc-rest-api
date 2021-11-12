@@ -11,24 +11,33 @@ export default function Feed({ username }) {
   const [post, setPost] = useState([]);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
-  console.log(username);
+  console.log(user);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = username
-          ? await axios.get(
-              "http://localhost:5000/api/posts/profile/" + username
-            )
-          : await axios.get(
-              "http://localhost:5000/api/posts/timeline/" + user._id
-            );
-        console.log(res.data);
+        // const res = username
+        //   ?
+        //   : await axios.get(
+        //       "http://localhost:5000/api/posts/timeline/" + user._id
+        //     );
+        if (username) {
+          const res = await axios.get(
+            "http://localhost:5000/api/posts/profile/" + username
+          );
+          console.log(res.data);
+          setPosts(res.data);
+        } else {
+          const res = await axios.get(
+            "http://localhost:5000/api/posts/timeline/" + user._id
+          );
+          setPosts(res.data);
+        }
+
         // setPosts(
         //   res.data((x, y) => {
         //     return new Date(y.createdAt) - new Date(x.createdAt); //პოსტებს ალაგებს დრპის მიხედვით, ფიდი რო ახლები ზემოთ იყოს
         //   })
         // );
-        setPosts(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -55,7 +64,7 @@ export default function Feed({ username }) {
         {id ? (
           <Post post={post} large={true} />
         ) : (
-          posts.map((post) => <Post post={post} />)
+          posts?.map((post) => <Post post={post} />)
         )}
       </div>
     </div>

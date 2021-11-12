@@ -68,9 +68,11 @@ router.delete("/:id", async (req, res) => {
 });
 
 //get a user
+// აქ ბევრჯერ შემოდის მოთხოვნა, არასაჭირო დროს, გასარკვევია
 router.get("/", async (req, res) => {
   // const userId = req.config.userId;
   // const username = req.config.username;
+  console.log("Asdasd");
   const userId = req.query.userId;
   const username = req.query.username;
   try {
