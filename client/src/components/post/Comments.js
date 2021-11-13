@@ -1,28 +1,48 @@
 import { PermDataSettingOutlined } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router";
 import "./comments.css";
+import Picker from "emoji-picker-react";
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 
-export default function Comments({ user, singlePost, fetchPost }) {
+export default function Comments({
+  user,
+  singlePost,
+  fetchPost,
+  postId,
+  comments,
+}) {
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState();
-  console.log(user);
-  console.log(singlePost);
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [emojiVisible, setEmojiVisible] = useState(false);
 
+  console.log(postId);
+
+  const scrollRef = useRef();
+
+  const { id } = useParams();
   const handleSubmit = async (e) => {
-    if (e.which === 13 && !e.shiftKey) {
+    // console.log(singlePost._id);
+
+    if (e.which === 13 && !e.shiftKey && commentText.trim() !== "") {
+      console.log(commentText.length);
       e.preventDefault();
       const info = {
         commentText,
         user_name: user.username,
         user_profilePicture: user.profilePicture,
       };
+      let id;
+      postId ? (id = postId) : (id = singlePost._id);
+      console.log(id);
       try {
         const res = await axios.put(
-          `http://localhost:5000/api/posts/comment/${user._id}/${singlePost._id}`,
+          `http://localhost:5000/api/posts/comment/${user._id}/${id}`,
           { info }
         );
-        fetchPost();
+        postId ? fetchPost(postId) : fetchPost();
+        setCommentText("");
         console.log(res.data);
       } catch (err) {
         console.log(err);
@@ -30,18 +50,41 @@ export default function Comments({ user, singlePost, fetchPost }) {
     }
   };
 
-  console.log(comments);
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView();
+  });
+
+  const onEmojiClick = (event, emojiObject) => {
+    console.log(emojiObject.emoji);
+    setCommentText(commentText + emojiObject.emoji);
+  };
+  console.log("render");
   return (
-    <div className="larg__coment__container">
-      {singlePost?.comments?.length === 0 && (
-        <div className="coment__container">
-          <div className="coment__content">
-            <p>Noone has commented on this post yet</p>{" "}
+    <div
+      className={
+        singlePost ? "larg__coment__container " : "small__coment__container"
+      }
+      // style={singlePost?.comments?.length  === 0&& { flexDirection: "column" }}
+      style={{ flexDirection: singlePost?.comments?.length === 0 && "column" }}
+    >
+      {singlePost?.comments?.length === 0 && comments?.length === 0 && (
+        <div className={singlePost ? "coment__container" : ""}>
+          <div className={singlePost ? "coment__content" : ""}>
+            <p>No one has commented on this post yet</p>{" "}
           </div>
         </div>
       )}
+      {comments?.length === 0 ||
+        (singlePost?.length === 0 && (
+          <div className={singlePost ? "coment__container" : ""}>
+            <div className={singlePost ? "coment__content" : ""}>
+              <p>No one has commented on this post yet</p>{" "}
+            </div>
+          </div>
+        ))}
+
       {singlePost?.comments?.map((comment) => (
-        <div className="coment__container">
+        <div className="coment__container" ref={scrollRef}>
           <img className="postProfileImg" src={comment.user_profilePicture} />
           <div className="coment__content">
             <span>dito kapanadze </span>
@@ -49,19 +92,52 @@ export default function Comments({ user, singlePost, fetchPost }) {
           </div>
         </div>
       ))}
-      {/* <img className="postProfileImg" src={user?.profilePicture} />
-        <div className="coment__content">
-          <span>dito kapanadze </span>
-          <p>dsfs dsfsdfs s s dfdsf sdfsdf sdf d sdfsdf dsfsfds</p>
-        </div> */}
 
-      <form type="submit" className="comment__form">
+      {/* {comments?.map((comment) => (
+        <div className="coment__container" ref={scrollRef}>
+          <img className="postProfileImg" src={comment.user_profilePicture} />
+          <div className="coment__content">
+            <span>dito kapanadze </span>
+            <p>{comment.text}</p>
+          </div>
+        </div>
+      ))} */}
+
+      {comments?.map((comment) => (
+        <div className="coment__container" ref={scrollRef}>
+          <img className="postProfileImg" src={comment.user_profilePicture} />
+          <div className="coment__content">
+            <span>dito kapanadze </span>
+            <p>{comment.text}</p>
+          </div>
+        </div>
+      ))}
+
+      <form
+        type="submit"
+        className={singlePost ? "comment__form" : "small__form"}
+      >
+        <SentimentSatisfiedIcon
+          className="emoji__icon"
+          onClick={() => setEmojiVisible(!emojiVisible)}
+        />
+
         <textarea
+          required
           onChange={(e) => setCommentText(e.target.value)}
           value={commentText}
           onKeyPress={(e) => handleSubmit(e)}
           placeholder="write a comment"
         />
+        {emojiVisible && (
+          <Picker
+            className="emoji__container"
+            groupVisibility={{
+              flags: false,
+            }}
+            onEmojiClick={onEmojiClick}
+          />
+        )}
       </form>
     </div>
   );

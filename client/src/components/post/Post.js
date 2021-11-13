@@ -16,37 +16,51 @@ export default function Post({ post, large }) {
   const [isLiked, setIsLiked] = useState();
   const [singlePost, setSinglePost] = useState([]);
   const [user, setUser] = useState({});
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState([]);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   let history = useHistory();
   const { user: currentUser, largeMode, dispatch } = useContext(AuthContext);
   const { id } = useParams();
 
   // შეიძლება გამომდგეს
-  const fetchPost = async () => {
-    try {
-      const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
-      setSinglePost(res.data);
-      setLike(res.data.likes.length);
-    } catch (err) {
-      console.log(err.response);
+  const fetchPost = async (postId) => {
+    if (id) {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+        setSinglePost(res.data);
+        setLike(res.data.likes.length);
+      } catch (err) {
+        console.log(err.response);
+      }
+    } else {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/posts/${postId}`
+        );
+        setComments(res.data.comments);
+        // setLike(res.data.likes.length);
+      } catch (err) {
+        console.log(err.response);
+      }
     }
   };
+
   useEffect(() => {
     large && fetchPost();
   }, [id]);
   //  ამოწმებს ქურენთ იუზერს უკვე ხომ არ ქვს დალაიქებული
   useEffect(() => {
-    console.log("test");
     setIsLiked(post?.likes?.includes(currentUser?._id));
   }, [currentUser?._id, post?.likes]);
-  console.log(isLiked);
+
   const likeHandler = async () => {
     try {
       const res = await axios.put(
         `http://localhost:5000/api/posts/${post._id}/like`,
         { userId: currentUser._id }
       );
-      console.log(res.data);
+
       if (res.data.likes) {
         setLike(res.data.likes.length);
       } else {
@@ -93,11 +107,16 @@ export default function Post({ post, large }) {
     }
     return <p>be first to like this post</p>;
   };
+  const handleClick = (postId) => {
+    console.log("Asd");
+    setShowComments(!showComments);
+    fetchPost(postId);
+  };
 
   return (
     <div className={`post ${large ? "large" : ""}`}>
       {!large ? (
-        <div className={`postWrapper ${large ? "" : ""}`}>
+        <div key={post._id} className={`postWrapper ${large ? "" : ""}`}>
           <div className="postTop">
             <div className="postTopLeft">
               <Link to={`/profile/${user?.username}`}>
@@ -127,9 +146,24 @@ export default function Post({ post, large }) {
               <LikeText />
             </div>
             <div className="postBottomRight">
-              <span className="postCommentText">{post.comment} comments</span>
+              <span
+                onClick={(e) => handleClick(post._id)}
+                className="postCommentText"
+              >
+                {post.comment} comments
+              </span>
             </div>
           </div>
+          {showComments ? (
+            <Comments
+              postId={post._id}
+              user={user}
+              comments={comments}
+              fetchPost={fetchPost}
+            />
+          ) : (
+            ""
+          )}
         </div>
       ) : (
         <div className="large__wrapper">

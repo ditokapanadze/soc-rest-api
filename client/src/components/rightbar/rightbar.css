@@ -50,6 +50,10 @@
 
 .rightbarInfoItem {
   margin-bottom: 10px;
+  max-width: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .rightbarInfoKey {
@@ -93,4 +97,7 @@
   align-items: center;
   font-size: 16px;
   justify-content: center;
+}
+.edit__btn {
+  cursor: pointer;
 }

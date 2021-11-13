@@ -32,6 +32,24 @@ router.put("/", async (req, res) => {
 });
 
 // avatar upload, ცოტა ნელა მუშაობს ვერიფაიუზერის ფუნქციის გამო. შეილება ცოტა გამოსწორება.
+// change user info
+router.put("/changeInfo", verifyUser, async (req, res) => {
+  console.log(req.body);
+  const { userId } = req.config;
+  console.log(userId);
+  try {
+    const newUser = await User.findByIdAndUpdate(
+      userId,
+      { desc: req.body.editInfo },
+      { new: true }
+    );
+    console.log(newUser);
+    res.status(200).json(newUser);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+//
 router.post(
   "/changeavatar",
   verifyUser,

@@ -3,6 +3,7 @@ import { Users } from "../../dummyData";
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Online from "../online/Online";
+import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Add, Remove } from "@material-ui/icons";
@@ -11,7 +12,7 @@ export default function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
   const [followed, setFollowed] = useState();
-
+  const [editValue, setEditValue] = useState("");
   const { user: currentUser, dispatch } = useContext(AuthContext);
 
   // ვამოწმებს ფლოლოუერებში გვყავს თუ არა ეს პროფილი რო მაგის მიხედვით ფოლოუ და ანფოლოა ღილაკი დარენდერდეს
@@ -77,6 +78,18 @@ export default function Rightbar({ user }) {
   };
   console.log(user?.username);
   console.log(currentUser?.username);
+
+  const handleClick = () => {
+    // setEditValue(user.city);
+  };
+  const handleChange = (e) => {
+    setEditValue(e.target.value);
+  };
+  console.log(editValue);
+  const Input = ({ value, onChange }) => {
+    console.log("Render");
+    return <input value={value} onChange={onChange} />;
+  };
   const ProfileRightbar = () => {
     return (
       <>
@@ -91,22 +104,36 @@ export default function Rightbar({ user }) {
         <h4 className="rightbarTitle">User information</h4>
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">City:</span>
-            <span className="rightbarInfoValue">{user.city}</span>
+            <div className="info__container">
+              {" "}
+              <span className="rightbarInfoKey">City:</span>
+              <span className="rightbarInfoValue">{user.city}</span>
+            </div>
+            <Input
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+            />
+            <ModeEditOutlinedIcon className="edit__btn" onClick={handleClick} />
           </div>
           <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">From:</span>
-            <span className="rightbarInfoValue">{user.from}</span>
+            <div className="info__container">
+              <span className="rightbarInfoKey">From:</span>
+              <span className="rightbarInfoValue">{user.from}</span>
+            </div>
+            <ModeEditOutlinedIcon className="edit__btn" />
           </div>
           <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">Relationship:</span>
-            <span className="rightbarInfoValue">
-              {user.relationship === 1
-                ? "single"
-                : user.relationship === 2
-                ? "Married"
-                : "-"}
-            </span>
+            <div className="rightbarInfoItem">
+              <span className="rightbarInfoKey">Relationship:</span>
+              <span className="rightbarInfoValue">
+                {user.relationship === 1
+                  ? "single"
+                  : user.relationship === 2
+                  ? "Married"
+                  : "-"}
+              </span>
+            </div>
+            <ModeEditOutlinedIcon className="edit__btn" />
           </div>
         </div>
         <h4 className="rightbarTitle">User friends</h4>
@@ -115,11 +142,7 @@ export default function Rightbar({ user }) {
             <Link to={`/profile/${friend?.username}`}>
               <div className="rightbarFollowing">
                 <img
-                  src={
-                    friend?.profilePicture
-                      ? PF + friend?.profilePicture
-                      : PF + "person/noAvatar.png"
-                  }
+                  src={friend.profilePicture}
                   alt=""
                   className="rightbarFollowingImg"
                 />

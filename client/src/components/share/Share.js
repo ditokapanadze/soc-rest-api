@@ -12,7 +12,7 @@ export default function Share() {
   const [postImage, setPostImage] = useState("");
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  console.log(postImage);
+  console.log(desc);
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData();

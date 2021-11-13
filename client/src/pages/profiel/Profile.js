@@ -10,11 +10,15 @@ import { AddAPhoto } from "@material-ui/icons";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import Resizer from "react-image-file-resizer";
 import { getUser } from "../../apiCalls";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { AuthContext } from "../../context/AuthContext";
+import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [user, setUser] = useState({});
+  const [editInfo, setEditInfo] = useState("");
   const [baseImage, setBaseImage] = useState("");
+  const [showInput, setShowInput] = useState(false);
   const username = useParams().username;
   const { dispatch } = useContext(AuthContext);
 
@@ -90,6 +94,32 @@ function Profile() {
     }
   };
   console.log(baseImage);
+  const handleClick = () => {
+    setEditInfo(user?.desc);
+    setShowInput(!showInput);
+  };
+
+  const changeInfo = async (e) => {
+    const token = localStorage.getItem("token");
+    e.preventDefault();
+    console.log(editInfo);
+    try {
+      const res = await axios.put(
+        "http://localhost:5000/api/users/changeInfo",
+        { editInfo },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      fetchUser();
+      setShowInput(false);
+      setEditInfo("");
+    } catch (err) {
+      console.log(err.response);
+    }
+  };
   return (
     <>
       <Topbar />
@@ -152,7 +182,38 @@ function Profile() {
                 {user?.username?.charAt(0).toUpperCase() +
                   user?.username?.slice(1)}
               </h4>
-              <span className="prifileInfoDesc"> {user?.desc}</span>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {!showInput && (
+                  <span className="prifileInfoDesc"> {user?.desc}</span>
+                )}
+
+                {showInput ? (
+                  <form type="submit" onSubmit={changeInfo}>
+                    <input
+                      value={editInfo}
+                      onChange={(e) => setEditInfo(e.target.value)}
+                    />
+                  </form>
+                ) : (
+                  ""
+                )}
+                {showInput ? (
+                  <SaveOutlinedIcon
+                    onClick={changeInfo}
+                    style={{ cursor: "pointer" }}
+                  />
+                ) : (
+                  <ModeEditOutlinedIcon
+                    onClick={handleClick}
+                    style={{
+                      cursor: "pointer",
+                      marginLeft: "20px",
+                      marginTop: "5px",
+                      fontSize: "20px",
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </div>
           <div className="profileRightBottom">
