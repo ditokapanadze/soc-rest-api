@@ -20,7 +20,7 @@ function Profile() {
   const [baseImage, setBaseImage] = useState("");
   const [showInput, setShowInput] = useState(false);
   const username = useParams().username;
-  const { dispatch } = useContext(AuthContext);
+  const { user: currentUser, dispatch } = useContext(AuthContext);
 
   const fetchUser = async () => {
     try {
@@ -32,14 +32,17 @@ function Profile() {
           },
         }
       );
+      console.log("test test");
+      console.log(res.data);
       setUser(res.data);
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
+    console.log("test test efeqti");
     fetchUser();
-  }, [username]);
+  }, [username, currentUser]);
 
   const resizeFile = (file) =>
     new Promise((resolve) => {
@@ -120,6 +123,9 @@ function Profile() {
       console.log(err.response);
     }
   };
+
+  console.log(user);
+  console.log(currentUser);
   return (
     <>
       <Topbar />
@@ -197,21 +203,25 @@ function Profile() {
                 ) : (
                   ""
                 )}
-                {showInput ? (
-                  <SaveOutlinedIcon
-                    onClick={changeInfo}
-                    style={{ cursor: "pointer" }}
-                  />
+                {user?.username === currentUser?.username ? (
+                  showInput ? (
+                    <SaveOutlinedIcon
+                      onClick={changeInfo}
+                      style={{ cursor: "pointer" }}
+                    />
+                  ) : (
+                    <ModeEditOutlinedIcon
+                      onClick={handleClick}
+                      style={{
+                        cursor: "pointer",
+                        marginLeft: "20px",
+                        marginTop: "5px",
+                        fontSize: "20px",
+                      }}
+                    />
+                  )
                 ) : (
-                  <ModeEditOutlinedIcon
-                    onClick={handleClick}
-                    style={{
-                      cursor: "pointer",
-                      marginLeft: "20px",
-                      marginTop: "5px",
-                      fontSize: "20px",
-                    }}
-                  />
+                  ""
                 )}
               </div>
             </div>

@@ -1,6 +1,6 @@
 import "./rightbar.css";
 import { Users } from "../../dummyData";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import Online from "../online/Online";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
@@ -8,13 +8,18 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Add, Remove } from "@material-ui/icons";
 import { getUser } from "../../apiCalls";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+
 export default function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
   const [followed, setFollowed] = useState();
-  const [editValue, setEditValue] = useState("");
-  const { user: currentUser, dispatch } = useContext(AuthContext);
+  const [cityInput, setCityInput] = useState(false);
+  const [fromInput, setFromInput] = useState(false);
 
+  const [editInfo, setEditInfo] = useState("");
+  const { user: currentUser, dispatch } = useContext(AuthContext);
+  const inputRef = useRef(null);
   // ვამოწმებს ფლოლოუერებში გვყავს თუ არა ეს პროფილი რო მაგის მიხედვით ფოლოუ და ანფოლოა ღილაკი დარენდერდეს
   useEffect(() => {
     setFollowed(currentUser?.following?.includes(user?._id));
@@ -76,20 +81,44 @@ export default function Rightbar({ user }) {
       </>
     );
   };
-  console.log(user?.username);
-  console.log(currentUser?.username);
 
-  const handleClick = () => {
-    // setEditValue(user.city);
+  const handleClick = (x) => {
+    console.log(x.target);
   };
-  const handleChange = (e) => {
-    setEditValue(e.target.value);
+  // const handleClick = () => {
+  //   console.log(inputRef.current.valu);
+  // };
+  const handleChange = () => {
+    console.log(inputRef.current.name);
   };
-  console.log(editValue);
-  const Input = ({ value, onChange }) => {
-    console.log("Render");
-    return <input value={value} onChange={onChange} />;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let test = inputRef.current.name;
+    const token = localStorage.getItem("token");
+    let editAdress = {};
+    editAdress[inputRef.current.name] = inputRef.current.value;
+    console.log(editAdress);
+    try {
+      const res = await axios.put(
+        "http://localhost:5000/api/users/changeInfo",
+        { editAdress },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    setCityInput(false);
+    setFromInput(false);
+    getUser(dispatch);
+
+    console.log("currentUser");
   };
+  console.log(currentUser);
+  console.log(user);
   const ProfileRightbar = () => {
     return (
       <>
@@ -109,18 +138,65 @@ export default function Rightbar({ user }) {
               <span className="rightbarInfoKey">City:</span>
               <span className="rightbarInfoValue">{user.city}</span>
             </div>
-            <Input
-              value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
-            />
-            <ModeEditOutlinedIcon className="edit__btn" onClick={handleClick} />
+            {cityInput ? (
+              <form type="submit" onSubmit={handleSubmit}>
+                {" "}
+                <input ref={inputRef} name="city" onChange={handleChange} />
+              </form>
+            ) : (
+              ""
+            )}
+
+            {currentUser?.username === user?.username && !cityInput ? (
+              <ModeEditOutlinedIcon
+                onClick={() => {
+                  setCityInput(!cityInput);
+                  setFromInput(false);
+                }}
+                className="edit__btn"
+              />
+            ) : (
+              <SaveOutlinedIcon
+                style={{ cursor: "pointer" }}
+                onClick={handleSubmit}
+              />
+            )}
           </div>
           <div className="rightbarInfoItem">
             <div className="info__container">
               <span className="rightbarInfoKey">From:</span>
               <span className="rightbarInfoValue">{user.from}</span>
             </div>
-            <ModeEditOutlinedIcon className="edit__btn" />
+            {/* {showInput ? (
+              <form type="submit">
+                {" "}
+                <input ref={inputRef} name="from" onChange={handleChange} />
+              </form>
+            ) : (
+              ""
+            )} */}
+            {fromInput ? (
+              <form type="submit" onSubmit={handleSubmit}>
+                {" "}
+                <input ref={inputRef} name="from" onChange={handleChange} />
+              </form>
+            ) : (
+              ""
+            )}
+            {currentUser?.username === user?.username && !fromInput ? (
+              <ModeEditOutlinedIcon
+                className="edit__btn"
+                onClick={() => {
+                  setFromInput(!fromInput);
+                  setCityInput(false);
+                }}
+              />
+            ) : (
+              <SaveOutlinedIcon
+                style={{ cursor: "pointer" }}
+                onClick={handleSubmit}
+              />
+            )}
           </div>
           <div className="rightbarInfoItem">
             <div className="rightbarInfoItem">
@@ -133,7 +209,12 @@ export default function Rightbar({ user }) {
                   : "-"}
               </span>
             </div>
-            <ModeEditOutlinedIcon className="edit__btn" />
+            {currentUser?.username === user?.username && (
+              <ModeEditOutlinedIcon
+                className="edit__btn"
+                onClick={handleClick}
+              />
+            )}
           </div>
         </div>
         <h4 className="rightbarTitle">User friends</h4>

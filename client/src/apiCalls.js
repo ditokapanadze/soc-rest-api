@@ -29,7 +29,7 @@ export const getUser = async (dispatch) => {
     const res = await axios.get(
       `http://localhost:5000/api/users/?userId=${userId}`
     );
-
+    console.log(res.data);
     dispatch({ type: "GET_USER", payload: res.data });
   } catch (err) {
     console.log(err);

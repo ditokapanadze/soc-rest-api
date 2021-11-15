@@ -17,7 +17,7 @@ import PrivateRoute from "./routing/PrivateRoute";
 import { HideRoute } from "./routing/PrivateRoute";
 import { getUser } from "./apiCalls";
 import { register } from "./context/AuthActions";
-
+import Messanger from "./components/messanger/Messanger";
 function App() {
   const token = localStorage.getItem("token");
   const { user, dispatch } = useContext(AuthContext);
@@ -53,9 +53,9 @@ function App() {
   return (
     <Router>
       <Switch>
-        {/* <Route path="/login">
-          {chekcToken() ? <Redirect to="/" /> : <Login />}
-        </Route> */}
+        <Route path="/messanger">
+          <Messanger />
+        </Route>
 
         <HideRoute path="/login" component={Login} />
         <HideRoute path="/register" component={Register} />

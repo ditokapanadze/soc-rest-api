@@ -34,19 +34,44 @@ router.put("/", async (req, res) => {
 // avatar upload, ცოტა ნელა მუშაობს ვერიფაიუზერის ფუნქციის გამო. შეილება ცოტა გამოსწორება.
 // change user info
 router.put("/changeInfo", verifyUser, async (req, res) => {
-  console.log(req.body);
   const { userId } = req.config;
-  console.log(userId);
-  try {
-    const newUser = await User.findByIdAndUpdate(
-      userId,
-      { desc: req.body.editInfo },
-      { new: true }
-    );
-    console.log(newUser);
-    res.status(200).json(newUser);
-  } catch (err) {
-    res.status(400).json(err);
+  console.log(req.body.editInfo);
+  if (req.body.editInfo) {
+    try {
+      const newUser = await User.findByIdAndUpdate(
+        userId,
+        { desc: req.body.editInfo },
+        { new: true }
+      );
+      console.log(newUser);
+      res.status(200).json(newUser);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  }
+  if (req.body.editAdress?.city) {
+    try {
+      const newUser = await User.findByIdAndUpdate(
+        userId,
+        { city: req.body.editAdress.city },
+        { new: true }
+      );
+      res.status(200).json(newUser);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  }
+  if (req.body.editAdress?.from) {
+    try {
+      const newUser = await User.findByIdAndUpdate(
+        userId,
+        { from: req.body.editAdress.from },
+        { new: true }
+      );
+      res.status(200).json(newUser);
+    } catch (err) {
+      res.status(400).json(err);
+    }
   }
 });
 //

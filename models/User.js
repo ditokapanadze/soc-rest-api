@@ -28,7 +28,8 @@ const UserSchema = new mongoose.Schema(
     },
     coverPicture: {
       type: String,
-      default: "",
+      default:
+        "https://res.cloudinary.com/dr7mu778b/image/upload/v1636894837/noCover_b8ghik.png",
     },
     followers: {
       type: Array,

@@ -97,7 +97,6 @@ export default function Post({ post, large }) {
   };
 
   const LikeText = () => {
-    console.log(like);
     if (isLiked && like > 1) {
       return (
         <p className="postLikeCounter">you and {like - 1} people, like this</p>
@@ -108,7 +107,6 @@ export default function Post({ post, large }) {
     return <p>be first to like this post</p>;
   };
   const handleClick = (postId) => {
-    console.log("Asd");
     setShowComments(!showComments);
     fetchPost(postId);
   };

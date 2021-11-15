@@ -24,7 +24,7 @@ export default function Feed({ username }) {
           const res = await axios.get(
             "http://localhost:5000/api/posts/profile/" + username
           );
-          console.log(res.data);
+
           setPosts(res.data);
         } else {
           const res = await axios.get(
@@ -56,7 +56,7 @@ export default function Feed({ username }) {
     };
     fetchPost();
   }, [id]);
-  console.log(post);
+
   return (
     <div className="feed">
       <div className={`feedWrapper ${id ? "largeWrapper" : ""}`}>
