@@ -81,17 +81,31 @@ router.post(
   upload.single("file"),
   async (req, res) => {
     // const { userId } = req.config;
-    console.log(req.file.path);
-    try {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      console.log(result.secure_url);
-      const user = await User.findByIdAndUpdate(req.config.userId, {
-        profilePicture: result.secure_url,
-        cloudinary_id: result.public_id,
-      });
-      res.json(user);
-    } catch (err) {
-      console.log(err);
+    console.log(req.body.type);
+    if (req.body.type === "avatar") {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        console.log(result.secure_url);
+        const user = await User.findByIdAndUpdate(req.config.userId, {
+          profilePicture: result.secure_url,
+          cloudinary_id: result.public_id,
+        });
+        res.json(user);
+      } catch (err) {
+        console.log(err);
+      }
+    } else if (req.body.type === "cover") {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        console.log(result.secure_url);
+        const user = await User.findByIdAndUpdate(req.config.userId, {
+          coverPicture: result.secure_url,
+          cloudinary_id: result.public_id,
+        });
+        res.json(user);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 );

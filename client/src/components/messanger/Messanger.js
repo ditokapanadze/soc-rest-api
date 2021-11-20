@@ -1,6 +1,6 @@
 import React from "react";
 import "./messanger.css";
-import Avatar from "../../../"
+
 function Messanger() {
   return (
     <div>

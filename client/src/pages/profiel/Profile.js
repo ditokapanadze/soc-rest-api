@@ -17,7 +17,8 @@ function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [user, setUser] = useState({});
   const [editInfo, setEditInfo] = useState("");
-  const [baseImage, setBaseImage] = useState("");
+  const [avatarImg, setAvatarImg] = useState("");
+  const [coverImage, setCoverImage] = useState("");
   const [showInput, setShowInput] = useState(false);
   const username = useParams().username;
   const { user: currentUser, dispatch } = useContext(AuthContext);
@@ -60,43 +61,81 @@ function Profile() {
       );
     });
   const uploadImage = async (e) => {
-    try {
+    console.log(e.target.id);
+    console.log(
+      "ASdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdsd"
+    );
+    if (e.target.id === "cover") {
       const file = e.target.files[0];
       // const image = await resizeFile(file);
-      setBaseImage(file);
-    } catch (err) {
-      console.log(err);
+      setCoverImage(file);
+    } else {
+      const file = e.target.files[0];
+      // const image = await resizeFile(file);
+      setAvatarImg(file);
     }
+
     // const file = e.target.files[0];
     // const base64 = await convertBase64(file);
     // setBaseImage(base64);
   };
-  const uploadAvatar = async () => {
-    const token = localStorage.getItem("token");
-    const avatar = baseImage;
+  console.log(coverImage);
+  const UploadPhoto = async (e) => {
+    console.log(e);
 
-    let formData = new FormData();
-    formData.append("file", avatar);
-    console.log(formData);
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/users/changeavatar",
-        formData,
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setBaseImage("");
-      fetchUser();
-      getUser(dispatch);
-    } catch (err) {
-      console.log(err.response);
+    const token = localStorage.getItem("token");
+
+    // const cover = coverImage;
+    // console.log(avatar);
+    if (e === "avatar") {
+      const avatar = avatarImg;
+      let formData = new FormData();
+      formData.append("file", avatar);
+      formData.append("type", "avatar");
+
+      console.log(formData);
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/users/changeavatar",
+          formData,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setAvatarImg("");
+        fetchUser();
+        getUser(dispatch);
+      } catch (err) {
+        console.log(err.response);
+      }
+    } else if (e === "cover") {
+      const cover = coverImage;
+      let formData = new FormData();
+      formData.append("file", cover);
+      formData.append("type", "cover");
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/users/changeavatar",
+          formData,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setCoverImage("");
+        fetchUser();
+        getUser(dispatch);
+      } catch (err) {
+        console.log(err.response);
+      }
     }
   };
-  console.log(baseImage);
+  console.log(avatarImg);
   const handleClick = () => {
     setEditInfo(user?.desc);
     setShowInput(!showInput);
@@ -135,34 +174,66 @@ function Profile() {
           <div className="profileRightTop">
             <div className="profileCover">
               <img
+                src={user.coverPicture}
                 src={
-                  user.coverPicture
-                    ? PF + user.coverPicture
-                    : PF + "person/noCover.png"
+                  coverImage
+                    ? URL.createObjectURL(coverImage)
+                    : user.coverPicture
                 }
                 className="profileCoverImg"
               />
-
+              <label htmlFor="cover">
+                {coverImage ? (
+                  <div
+                    onClick={(e) => UploadPhoto("cover")}
+                    className="coverupload__icon icon__container"
+                  >
+                    <CloudUploadOutlinedIcon className="add__photo__icon upload" />
+                    <p className="upload__tooltip" style={{ color: "white" }}>
+                      {" "}
+                      Click to upload
+                    </p>
+                  </div>
+                ) : (
+                  <div className="coverupload__icon icon__container">
+                    <AddAPhoto />
+                  </div>
+                )}{" "}
+                <input
+                  onChange={(e) => {
+                    uploadImage(e);
+                  }}
+                  style={{ display: "none" }}
+                  type={coverImage ? "" : "file"}
+                  id="cover"
+                  accept=".png, .jpeg, .jpg"
+                />
+              </label>
               <img
                 src={
-                  baseImage
-                    ? URL.createObjectURL(baseImage)
+                  avatarImg
+                    ? URL.createObjectURL(avatarImg)
                     : user.profilePicture
                 }
                 className="profileUserImg"
               />
               <label htmlFor="file">
                 {" "}
-                {baseImage ? (
-                  <div className="uploadicon__container">
+                {avatarImg ? (
+                  <div
+                    name="name"
+                    id="id"
+                    onClick={(e) => UploadPhoto("avatar")}
+                    className="uploadicon__container icon__container"
+                  >
                     <CloudUploadOutlinedIcon
+                      id="id"
                       className="add__photo__icon upload"
-                      onClick={uploadAvatar}
                     />
                     <p className="upload__tooltip"> Click to upload</p>
                   </div>
                 ) : (
-                  <div className="uploadicon__container">
+                  <div className="uploadicon__container icon__container">
                     {" "}
                     <AddAPhoto
                       style={{ cursor: "pointer" }}
@@ -175,7 +246,7 @@ function Profile() {
                     uploadImage(e);
                   }}
                   style={{ display: "none" }}
-                  type={baseImage ? "" : "file"}
+                  type={avatarImg ? "" : "file"}
                   id="file"
                   name="file"
                   accept=".png, .jpeg, .jpg"
