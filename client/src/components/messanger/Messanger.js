@@ -5,20 +5,48 @@ import Message from "./Message";
 import axios from "axios";
 import Chatonline from "./Chatonline";
 import { AuthContext } from "../../context/AuthContext";
+import io from "socket.io-client";
 
 function Messanger() {
   const [converstaions, setConversations] = useState([]);
   const [currentChat, seCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState("");
+
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
-  console.log(user);
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  });
+
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
+
+  useEffect(() => {
+    socket.current.emit("addUser", user?._id);
+    socket.current.on("getUsers", (users) => {
+      console.log(users);
+    });
+  }, [user]);
+
   useEffect(() => {
     const getConversations = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/conversations/${user._id}`
+          `http://localhost:5000/api/conversations/${user?._id}`
         );
         setConversations(res.data);
       } catch (err) {
@@ -49,7 +77,15 @@ function Messanger() {
       text: newMessage,
       conversationId: currentChat._id,
     };
+    const receiverId = currentChat.members.find(
+      (member) => member !== user._id
+    );
 
+    socket.current.emit("sendMessage", {
+      senderId: user._id,
+      receiverId,
+      text: newMessage,
+    });
     try {
       const res = await axios.post(
         `http://localhost:5000/api/messages/`,
@@ -61,6 +97,9 @@ function Messanger() {
       console.log(err);
     }
   };
+
+  useEffect(() => {}, []);
+
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);

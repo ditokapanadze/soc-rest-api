@@ -3,14 +3,11 @@ import React, { useState, useEffect } from "react";
 import "./conversations.css";
 
 function Conversations({ conversation, currentUser }) {
-  console.log(conversation);
-  console.log(currentUser);
   const [user, setUser] = useState(null);
   useEffect(() => {
     const friendId = conversation?.members.find((m) => m !== currentUser._id);
 
     const getUser = async () => {
-      console.log(friendId);
       const res = await axios.get(
         `http://localhost:5000/api/users?userId=${friendId}`
       );
@@ -18,7 +15,7 @@ function Conversations({ conversation, currentUser }) {
     };
     getUser();
   }, [conversation, currentUser]);
-  console.log(conversation);
+
   return (
     <div className="conversation">
       <img className="conversationImg" src={user?.profilePicture} alt="photo" />
