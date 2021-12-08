@@ -25,22 +25,7 @@ export default function Rightbar({ user }) {
     setFollowed(currentUser?.following?.includes(user?._id));
   }, [user?._id]);
 
-  useEffect(() => {
-    const getFriends = async () => {
-      try {
-        const friendList = await axios.get(
-          `http://localhost:5000/api/users/friends/${user._id}`
-        );
-        console.log(friendList);
-        setFriends(friendList.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getFriends();
-    console.log("Test");
-  }, [user]);
-  console.log(friends);
+  console.log(currentUser);
   const handleFollow = async () => {
     try {
       if (user?.followers.includes(currentUser?._id)) {
@@ -61,6 +46,20 @@ export default function Rightbar({ user }) {
     }
     setFollowed(!followed);
   };
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const firendList = await axios.get(
+          `http://localhost:5000/api/users/friends/${currentUser._id}`
+        );
+        console.log(firendList);
+        setFriends(firendList.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchFriends();
+  }, [user]);
 
   const HomeRightbar = () => {
     return (
@@ -74,8 +73,8 @@ export default function Rightbar({ user }) {
         <img className="rightbarAd" src={`${PF}ad.png`} alt="" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
-          {Users.map((u) => (
-            <Online key={u.id} user={u} />
+          {currentUser?.following.map((id) => (
+            <Online key={id} userId={id} />
           ))}
         </ul>
       </>

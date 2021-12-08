@@ -148,3 +148,6 @@ button {
 input {
   outline: none;
 }
+p {
+  line-height: 1.2;
+}

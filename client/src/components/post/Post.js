@@ -12,6 +12,8 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { largePost } from "../../apiCalls";
 export default function Post({ post, large }) {
   const [like, setLike] = useState(post?.likes?.length);
+  const [longPost, setLongPost] = useState(false);
+  const [slicePost, setSlicePost] = useState("");
   const [enlargeImg, setEnlargeImg] = useState(false);
   const [isLiked, setIsLiked] = useState();
   const [singlePost, setSinglePost] = useState([]);
@@ -110,7 +112,14 @@ export default function Post({ post, large }) {
     setShowComments(!showComments);
     fetchPost(postId);
   };
+  // ვამოწმებთ რამხელაა პოსტი რომ იმის მიხედვით გამოვაჩინოთ ან დავმალოთ Read More ღილაკი
 
+  useEffect(() => {
+    if (post?.desc?.length > 400) {
+      setLongPost(true);
+      setSlicePost(post?.desc.slice(0, 400));
+    }
+  }, [post]);
   return (
     <div className={`post ${large ? "large" : ""}`}>
       {!large ? (
@@ -128,7 +137,25 @@ export default function Post({ post, large }) {
             </div>
           </div>
           <div className="postCenter">
-            <span className="postText">{post.desc}</span>
+            <p className="postText">
+              {longPost ? slicePost + "... " : post.desc}
+
+              {!longPost && post.desc.length > 400 ? (
+                <span onClick={() => setLongPost(!longPost)}>
+                  {" "}
+                  <br />
+                  Show Less{" "}
+                </span>
+              ) : (
+                ""
+              )}
+              {longPost ? (
+                <span onClick={() => setLongPost(!longPost)}>Read More</span>
+              ) : (
+                ""
+              )}
+            </p>
+
             <img
               className="postImg"
               onClick={() => history.push(`/post/${post?._id}`)}
@@ -139,7 +166,7 @@ export default function Post({ post, large }) {
             <div className="postBottomLeft">
               <ThumbUpAltIcon
                 onClick={likeHandler}
-                className={`likeIcon ${isLiked ? "liked" : ""}`}
+                className={`likeIcon ${isLiked ? "" : "liked"}`}
               />
               <LikeText />
             </div>
@@ -200,13 +227,30 @@ export default function Post({ post, large }) {
                 <MoreVert />
               </div>
             </div>
-            <p className="postText">{singlePost.desc}</p>
+            <p className="postText large__postText">
+              {longPost ? slicePost + "... " : post?.desc}
+
+              {!longPost && post?.desc?.length > 400 ? (
+                <span onClick={() => setLongPost(!longPost)}>
+                  {" "}
+                  <br />
+                  Show Less{" "}
+                </span>
+              ) : (
+                ""
+              )}
+              {longPost ? (
+                <span onClick={() => setLongPost(!longPost)}>Read More</span>
+              ) : (
+                ""
+              )}
+            </p>
             <div className="postBottom">
               <div className="postBottomLeft">
                 <div className="postBottomLeft">
                   <ThumbUpAltIcon
                     onClick={likeHandler}
-                    className={`likeIcon ${isLiked ? "liked" : ""}`}
+                    className={`likeIcon ${isLiked ? "" : "liked"}`}
                   />
                   <LikeText />
                 </div>

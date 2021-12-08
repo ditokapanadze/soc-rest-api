@@ -1,5 +1,52 @@
-.messanger__header {
-  background-color: #1877f2;
-  width: 300px;
-  height: 30px;
+.messanger {
+  display: flex;
+}
+
+.chatMenu,
+.chatBox,
+.chatOnline {
+  flex: 1;
+}
+
+.chatMenuWrapper,
+.chatBoxWrapper,
+.chatOnlineWrapper {
+  padding: 10px;
+
+  height: 100%;
+}
+.chatBoxWrapper {
+}
+.chatMenuInput {
+  width: 90%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+.chatBoxTop {
+  overflow-y: scroll;
+  height: 600px;
+  height: 85vh;
+}
+.chatBoxWrapper {
+}
+.chatBoxBottom {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chatMessageInput {
+  width: 80%;
+  height: 90px;
+  padding: 10px;
+}
+.chatSubmitButton {
+  width: 70px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  background-color: teal;
+  border-radius: 5px;
+  color: white;
 }

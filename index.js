@@ -7,6 +7,8 @@ const morgan = require("morgan");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
+const convRoute = require("./routes/conversations");
+const messageRoute = require("./routes/messages");
 const cors = require("cors");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
@@ -71,6 +73,8 @@ app.use(morgan("common"));
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
+app.use("/api/conversations", convRoute);
+app.use("/api/messages", messageRoute);
 
 app.listen(5000, () => {
   console.log("Server is running");
