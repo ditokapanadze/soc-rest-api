@@ -17,12 +17,12 @@ function Conversations({ conversation, currentUser }) {
       setUser(res.data);
     };
     getUser();
-  }, [conversation]);
+  }, [conversation, currentUser]);
   console.log(conversation);
   return (
     <div className="conversation">
-      <img className="conversationImg" src={user.profilePicture} alt="photo" />
-      <span className="conversationsName">{user.username}</span>
+      <img className="conversationImg" src={user?.profilePicture} alt="photo" />
+      <span className="conversationsName">{user?.username}</span>
     </div>
   );
 }

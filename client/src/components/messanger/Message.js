@@ -1,7 +1,9 @@
 import React from "react";
 import "./message.css";
+import { format } from "timeago.js";
 
-function Message({ own }) {
+function Message({ own, message }) {
+  console.log(message);
   return (
     <div className={own ? "message own" : "message"}>
       <div className="messageTop">
@@ -9,13 +11,9 @@ function Message({ own }) {
           className="messageImg"
           src="https://res.cloudinary.com/dr7mu778b/image/upload/v1636802655/noAvatar_fqthh6.png"
         />
-        <p className="messageText">
-          It is a long established fact that a reader will be distracted by the
-          readable content of a page when looking at its layout. The point of
-          using Lorem Ipsum is that it has a more-or-less normal distribution
-        </p>
+        <p className="messageText">{message?.text}</p>
       </div>
-      <div className="messageBottom">1 Hour ago</div>
+      <div className="messageBottom">{format(message?.createdAt)}</div>
     </div>
   );
 }
