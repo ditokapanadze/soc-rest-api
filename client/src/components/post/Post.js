@@ -120,6 +120,7 @@ export default function Post({ post, large }) {
       setSlicePost(post?.desc.slice(0, 400));
     }
   }, [post]);
+  console.log(post.comments);
   return (
     <div className={`post ${large ? "large" : ""}`}>
       {!large ? (
@@ -175,7 +176,7 @@ export default function Post({ post, large }) {
                 onClick={(e) => handleClick(post._id)}
                 className="postCommentText"
               >
-                {post.comment} comments
+                {post?.comments?.length} comments
               </span>
             </div>
           </div>

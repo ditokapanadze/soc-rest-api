@@ -20,8 +20,11 @@
 .postWrapper {
   padding: 10px;
 }
+.postBottom {
+  border-top: 1px solid rgb(192, 189, 189);
+  padding: 10px 0;
+}
 .postBottomLeft {
-  margin-top: 10px;
 }
 .large_postWrapper {
   /* height: 90%; */
@@ -114,7 +117,7 @@
 
 .postCommentText {
   cursor: pointer;
-  border-bottom: 1px dashed gray;
+
   font-size: 15px;
 }
 .large_postCenter {
@@ -169,11 +172,13 @@
   margin-bottom: 0;
   display: flex;
   padding: 10px;
+
+  width: 100% !important;
 }
 .coment__content {
   margin-left: 10px;
   padding: 10px;
-  width: 200px;
+
   margin-bottom: 10px;
   border-radius: 20px;
   background-color: rgb(202, 204, 204, 0.3);

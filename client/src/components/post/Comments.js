@@ -1,10 +1,11 @@
-import { PermDataSettingOutlined } from "@material-ui/icons";
+import { CommentTwoTone, PermDataSettingOutlined } from "@material-ui/icons";
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
 import "./comments.css";
 import Picker from "emoji-picker-react";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Comments({
   user,
@@ -16,8 +17,6 @@ export default function Comments({
   const [commentText, setCommentText] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [emojiVisible, setEmojiVisible] = useState(false);
-
-  console.log(postId);
 
   const scrollRef = useRef();
 
@@ -58,7 +57,7 @@ export default function Comments({
     console.log(emojiObject.emoji);
     setCommentText(commentText + emojiObject.emoji);
   };
-  console.log("render");
+  console.log();
   return (
     <div
       className={
@@ -87,7 +86,7 @@ export default function Comments({
         <div className="coment__container" ref={scrollRef}>
           <img className="postProfileImg" src={comment.user_profilePicture} />
           <div className="coment__content">
-            <span>dito kapanadze </span>
+            <span>{comment.user_name}</span>
             <p>{comment.text}</p>
           </div>
         </div>
@@ -102,43 +101,45 @@ export default function Comments({
           </div>
         </div>
       ))} */}
-
-      {comments?.map((comment) => (
-        <div className="coment__container" ref={scrollRef}>
-          <img className="postProfileImg" src={comment.user_profilePicture} />
-          <div className="coment__content">
-            <span>dito kapanadze </span>
-            <p>{comment.text}</p>
-          </div>
-        </div>
-      ))}
-
-      <form
-        type="submit"
-        className={singlePost ? "comment__form" : "small__form"}
-      >
+      <div className="form__container">
+        <img className="comments__img" src={user.profilePicture} />
         <SentimentSatisfiedIcon
           className="emoji__icon"
           onClick={() => setEmojiVisible(!emojiVisible)}
         />
-
-        <textarea
-          required
-          onChange={(e) => setCommentText(e.target.value)}
-          value={commentText}
-          onKeyPress={(e) => handleSubmit(e)}
-          placeholder="write a comment"
-        />
-        {emojiVisible && (
-          <Picker
-            className="emoji__container"
-            groupVisibility={{
-              flags: false,
-            }}
-            onEmojiClick={onEmojiClick}
+        <form
+          type="submit"
+          className={singlePost ? "comment__form" : "small__form"}
+        >
+          <textarea
+            required
+            onChange={(e) => setCommentText(e.target.value)}
+            value={commentText}
+            onKeyPress={(e) => handleSubmit(e)}
+            placeholder="write a comment"
           />
-        )}
-      </form>
+
+          {emojiVisible && (
+            <Picker
+              className="emoji__container"
+              groupVisibility={{
+                flags: false,
+              }}
+              onEmojiClick={onEmojiClick}
+            />
+          )}
+        </form>
+      </div>
+
+      {comments?.map((comment) => (
+        <div className="coment__container">
+          <img className="postProfileImg" src={comment.user_profilePicture} />
+          <div className="coment__content">
+            <span>{comment.user_name}</span>
+            <p>{comment.text}</p>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

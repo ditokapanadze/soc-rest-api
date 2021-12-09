@@ -13,6 +13,7 @@ function Messanger() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
@@ -27,7 +28,7 @@ function Messanger() {
         createdAt: Date.now(),
       });
     });
-  });
+  }, []);
 
   useEffect(() => {
     arrivalMessage &&
@@ -38,7 +39,7 @@ function Messanger() {
   useEffect(() => {
     socket.current.emit("addUser", user?._id);
     socket.current.on("getUsers", (users) => {
-      console.log(users);
+      setOnlineUsers(users);
     });
   }, [user]);
 
@@ -92,6 +93,7 @@ function Messanger() {
         message
       );
       setMessages([...messages, res.data]);
+      console.log(messages);
       setNewMessage("");
     } catch (err) {
       console.log(err);
@@ -155,7 +157,11 @@ function Messanger() {
       </div>
       <div className="chatOnline">
         <div className="chatOnlineWrapper">
-          <Chatonline />
+          <Chatonline
+            onlineUsers={onlineUsers}
+            currentId={user?.id}
+            seCurrentChat={seCurrentChat}
+          />
         </div>
       </div>
     </div>

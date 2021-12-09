@@ -116,8 +116,8 @@ export default function Rightbar({ user }) {
 
     console.log("currentUser");
   };
-  console.log(currentUser);
-  console.log(user);
+  console.log(currentUser?.username);
+  console.log(user?.username);
   const ProfileRightbar = () => {
     return (
       <>
@@ -145,20 +145,26 @@ export default function Rightbar({ user }) {
             ) : (
               ""
             )}
-
-            {currentUser?.username === user?.username && !cityInput ? (
-              <ModeEditOutlinedIcon
-                onClick={() => {
-                  setCityInput(!cityInput);
-                  setFromInput(false);
-                }}
-                className="edit__btn"
-              />
+            {/* currentUser?.username === user?.username &&  */}
+            {currentUser?._id === user?._id ? (
+              <div>
+                {!cityInput ? (
+                  <ModeEditOutlinedIcon
+                    onClick={() => {
+                      setCityInput(!cityInput);
+                      setFromInput(false);
+                    }}
+                    className="edit__btn"
+                  />
+                ) : (
+                  <SaveOutlinedIcon
+                    style={{ cursor: "pointer" }}
+                    onClick={handleSubmit}
+                  />
+                )}
+              </div>
             ) : (
-              <SaveOutlinedIcon
-                style={{ cursor: "pointer" }}
-                onClick={handleSubmit}
-              />
+              ""
             )}
           </div>
           <div className="rightbarInfoItem">
@@ -174,27 +180,34 @@ export default function Rightbar({ user }) {
             ) : (
               ""
             )} */}
-            {fromInput ? (
-              <form type="submit" onSubmit={handleSubmit}>
-                {" "}
-                <input ref={inputRef} name="from" onChange={handleChange} />
-              </form>
+
+            {currentUser?._id === user?._id ? (
+              <div>
+                {fromInput ? (
+                  <form type="submit" onSubmit={handleSubmit}>
+                    {" "}
+                    <input ref={inputRef} name="from" onChange={handleChange} />
+                  </form>
+                ) : (
+                  ""
+                )}
+                {currentUser?.username === user?.username && !fromInput ? (
+                  <ModeEditOutlinedIcon
+                    className="edit__btn"
+                    onClick={() => {
+                      setFromInput(!fromInput);
+                      setCityInput(false);
+                    }}
+                  />
+                ) : (
+                  <SaveOutlinedIcon
+                    style={{ cursor: "pointer" }}
+                    onClick={handleSubmit}
+                  />
+                )}
+              </div>
             ) : (
               ""
-            )}
-            {currentUser?.username === user?.username && !fromInput ? (
-              <ModeEditOutlinedIcon
-                className="edit__btn"
-                onClick={() => {
-                  setFromInput(!fromInput);
-                  setCityInput(false);
-                }}
-              />
-            ) : (
-              <SaveOutlinedIcon
-                style={{ cursor: "pointer" }}
-                onClick={handleSubmit}
-              />
             )}
           </div>
           <div className="rightbarInfoItem">

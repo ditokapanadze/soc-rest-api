@@ -13,30 +13,32 @@
 .coment__container:first-child {
 }
 .small__coment__container {
-  display: flex;
   /* height: 200px; */
   min-height: 20px;
-
+  border-top: 1px solid rgb(192, 189, 189);
   margin-bottom: 50px;
-  flex-direction: column-reverse;
+  display: flex;
+  flex-direction: column;
   overflow-y: scroll;
   max-height: 400px;
 }
-.small__coment__container .coment__content {
-  width: 80%;
+.small__coment__container {
+}
+.larg__coment__container .coment__content {
+  width: 400px;
 }
 .comment__form {
   position: absolute;
   z-index: 100000;
   bottom: 20px;
-  width: 90%;
+  width: 80%;
+
   margin: 0 auto;
   margin-top: 10px;
 }
 .small__form {
-  position: absolute;
   bottom: 20px;
-  width: 80%;
+  width: 78%;
   left: 20px;
   margin-top: 30px;
 }
@@ -57,4 +59,23 @@
 .emoji-picker-react {
   position: absolute !important;
   bottom: 60px;
+}
+.small__form {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+}
+.small__form .emoji-picker-react {
+}
+.small__form textarea {
+}
+.comments__img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.form__container {
+  display: flex;
+  align-items: center;
 }

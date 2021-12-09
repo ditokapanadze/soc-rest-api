@@ -79,7 +79,7 @@ function Profile() {
     // const base64 = await convertBase64(file);
     // setBaseImage(base64);
   };
-  console.log(coverImage);
+  console.log(user);
   const UploadPhoto = async (e) => {
     console.log(e);
 
@@ -182,33 +182,38 @@ function Profile() {
                 }
                 className="profileCoverImg"
               />
-              <label htmlFor="cover">
-                {coverImage ? (
-                  <div
-                    onClick={(e) => UploadPhoto("cover")}
-                    className="coverupload__icon icon__container"
-                  >
-                    <CloudUploadOutlinedIcon className="add__photo__icon upload" />
-                    <p className="upload__tooltip" style={{ color: "white" }}>
-                      {" "}
-                      Click to upload
-                    </p>
-                  </div>
-                ) : (
-                  <div className="coverupload__icon icon__container">
-                    <AddAPhoto />
-                  </div>
-                )}{" "}
-                <input
-                  onChange={(e) => {
-                    uploadImage(e);
-                  }}
-                  style={{ display: "none" }}
-                  type={coverImage ? "" : "file"}
-                  id="cover"
-                  accept=".png, .jpeg, .jpg"
-                />
-              </label>
+              {user?._id === currentUser?._id ? (
+                <label htmlFor="cover">
+                  {coverImage ? (
+                    <div
+                      onClick={(e) => UploadPhoto("cover")}
+                      className="coverupload__icon icon__container"
+                    >
+                      <CloudUploadOutlinedIcon className="add__photo__icon upload" />
+                      <p className="upload__tooltip" style={{ color: "white" }}>
+                        {" "}
+                        Click to upload
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="coverupload__icon icon__container">
+                      <AddAPhoto />
+                    </div>
+                  )}{" "}
+                  <input
+                    onChange={(e) => {
+                      uploadImage(e);
+                    }}
+                    style={{ display: "none" }}
+                    type={coverImage ? "" : "file"}
+                    id="cover"
+                    accept=".png, .jpeg, .jpg"
+                  />
+                </label>
+              ) : (
+                ""
+              )}
+
               <img
                 src={
                   avatarImg
@@ -217,41 +222,45 @@ function Profile() {
                 }
                 className="profileUserImg"
               />
-              <label htmlFor="file">
-                {" "}
-                {avatarImg ? (
-                  <div
-                    name="name"
-                    id="id"
-                    onClick={(e) => UploadPhoto("avatar")}
-                    className="uploadicon__container icon__container"
-                  >
-                    <CloudUploadOutlinedIcon
+              {user?._id === currentUser?._id ? (
+                <label htmlFor="file">
+                  {" "}
+                  {avatarImg ? (
+                    <div
+                      name="name"
                       id="id"
-                      className="add__photo__icon upload"
-                    />
-                    <p className="upload__tooltip"> Click to upload</p>
-                  </div>
-                ) : (
-                  <div className="uploadicon__container icon__container">
-                    {" "}
-                    <AddAPhoto
-                      style={{ cursor: "pointer" }}
-                      className="add__photo__icon"
-                    />
-                  </div>
-                )}
-                <input
-                  onChange={(e) => {
-                    uploadImage(e);
-                  }}
-                  style={{ display: "none" }}
-                  type={avatarImg ? "" : "file"}
-                  id="file"
-                  name="file"
-                  accept=".png, .jpeg, .jpg"
-                />
-              </label>
+                      onClick={(e) => UploadPhoto("avatar")}
+                      className="uploadicon__container icon__container"
+                    >
+                      <CloudUploadOutlinedIcon
+                        id="id"
+                        className="add__photo__icon upload"
+                      />
+                      <p className="upload__tooltip"> Click to upload</p>
+                    </div>
+                  ) : (
+                    <div className="uploadicon__container icon__container">
+                      {" "}
+                      <AddAPhoto
+                        style={{ cursor: "pointer" }}
+                        className="add__photo__icon"
+                      />
+                    </div>
+                  )}
+                  <input
+                    onChange={(e) => {
+                      uploadImage(e);
+                    }}
+                    style={{ display: "none" }}
+                    type={avatarImg ? "" : "file"}
+                    id="file"
+                    name="file"
+                    accept=".png, .jpeg, .jpg"
+                  />
+                </label>
+              ) : (
+                ""
+              )}
             </div>
 
             <div className="profileInfo">
