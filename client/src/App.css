@@ -172,3 +172,14 @@ input {
 p {
   line-height: 1.2;
 }
+.hidden {
+  display: none;
+}
+
+.small .chatbox {
+  height: 90%;
+}
+textarea {
+  outline: none;
+  resize: none;
+}

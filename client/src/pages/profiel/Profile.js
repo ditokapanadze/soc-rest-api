@@ -3,7 +3,7 @@ import "./profile.css";
 import Topbar from "../../components/topbar/Tobar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Feed from "../../components/feed/Feed";
-import Rightbar from "../../components/rightbar/Rightbar";
+import { Rightbar } from "../../components/rightbar/Rightbar";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { AddAPhoto } from "@material-ui/icons";
@@ -26,22 +26,20 @@ function Profile() {
   const fetchUser = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/users?username=${username}`,
+        `https://socmedia-rest.herokuapp.com/api/users?username=${username}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      console.log("test test");
-      console.log(res.data);
+
       setUser(res.data);
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
-    console.log("test test efeqti");
     fetchUser();
   }, [username, currentUser]);
 
@@ -61,10 +59,6 @@ function Profile() {
       );
     });
   const uploadImage = async (e) => {
-    console.log(e.target.id);
-    console.log(
-      "ASdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdsd"
-    );
     if (e.target.id === "cover") {
       const file = e.target.files[0];
       // const image = await resizeFile(file);
@@ -79,10 +73,8 @@ function Profile() {
     // const base64 = await convertBase64(file);
     // setBaseImage(base64);
   };
-  console.log(user);
-  const UploadPhoto = async (e) => {
-    console.log(e);
 
+  const UploadPhoto = async (e) => {
     const token = localStorage.getItem("token");
 
     // const cover = coverImage;
@@ -93,10 +85,9 @@ function Profile() {
       formData.append("file", avatar);
       formData.append("type", "avatar");
 
-      console.log(formData);
       try {
         const res = await axios.post(
-          "http://localhost:5000/api/users/changeavatar",
+          "https://socmedia-rest.herokuapp.com/api/users/changeavatar",
           formData,
           {
             headers: {
@@ -118,7 +109,7 @@ function Profile() {
       formData.append("type", "cover");
       try {
         const res = await axios.post(
-          "http://localhost:5000/api/users/changeavatar",
+          "https://socmedia-rest.herokuapp.com/api/users/changeavatar",
           formData,
           {
             headers: {
@@ -135,7 +126,7 @@ function Profile() {
       }
     }
   };
-  console.log(avatarImg);
+
   const handleClick = () => {
     setEditInfo(user?.desc);
     setShowInput(!showInput);
@@ -144,10 +135,10 @@ function Profile() {
   const changeInfo = async (e) => {
     const token = localStorage.getItem("token");
     e.preventDefault();
-    console.log(editInfo);
+
     try {
       const res = await axios.put(
-        "http://localhost:5000/api/users/changeInfo",
+        "https://socmedia-rest.herokuapp.com/api/users/changeInfo",
         { editInfo },
         {
           headers: {
@@ -163,8 +154,6 @@ function Profile() {
     }
   };
 
-  console.log(user);
-  console.log(currentUser);
   return (
     <>
       <Topbar />

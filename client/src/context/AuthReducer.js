@@ -13,28 +13,24 @@ const AuthReducer = (state, action) => {
         error: false,
       };
     case "LOGIN_SUCCESS":
-      console.log(action.payload);
       return {
         user: action.payload,
         isFatching: false,
         error: false,
       };
     case "REGISTER":
-      console.log(action.payload.res);
       return {
         user: action.payload.res,
         isFatching: false,
         error: false,
       };
     case "LOGIN_FAILURE":
-      console.log(action.payload);
       return {
         user: null,
         isFatching: false,
         error: action.payload,
       };
     case "GET_USER":
-      console.log(action.payload);
       return {
         user: action.payload,
         isFatching: false,
@@ -60,7 +56,6 @@ const AuthReducer = (state, action) => {
         },
       };
     case "LARGEMODE":
-      console.log(state.largeMode);
       return {
         ...state,
         user: {},

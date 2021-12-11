@@ -9,7 +9,7 @@ function Conversations({ conversation, currentUser }) {
 
     const getUser = async () => {
       const res = await axios.get(
-        `http://localhost:5000/api/users?userId=${friendId}`
+        `https://socmedia-rest.herokuapp.com/api/users?userId=${friendId}`
       );
       setUser(res.data);
     };

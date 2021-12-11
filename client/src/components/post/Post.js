@@ -29,7 +29,9 @@ export default function Post({ post, large }) {
   const fetchPost = async (postId) => {
     if (id) {
       try {
-        const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+        const res = await axios.get(
+          `https://socmedia-rest.herokuapp.com/api/posts/${id}`
+        );
         setSinglePost(res.data);
         setLike(res.data.likes.length);
       } catch (err) {
@@ -38,7 +40,7 @@ export default function Post({ post, large }) {
     } else {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/posts/${postId}`
+          `https://socmedia-rest.herokuapp.com/api/posts/${postId}`
         );
         setComments(res.data.comments);
         // setLike(res.data.likes.length);
@@ -59,7 +61,7 @@ export default function Post({ post, large }) {
   const likeHandler = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/posts/${post._id}/like`,
+        `https://socmedia-rest.herokuapp.com/api/posts/${post._id}/like`,
         { userId: currentUser._id }
       );
 
@@ -78,7 +80,7 @@ export default function Post({ post, large }) {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users?userId=${post.userId}`,
+          `https://socmedia-rest.herokuapp.com/api/users?userId=${post.userId}`,
           {
             headers: {
               authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -120,7 +122,7 @@ export default function Post({ post, large }) {
       setSlicePost(post?.desc.slice(0, 400));
     }
   }, [post]);
-  console.log(post.comments);
+
   return (
     <div className={`post ${large ? "large" : ""}`}>
       {!large ? (

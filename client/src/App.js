@@ -22,7 +22,6 @@ function App() {
   const token = localStorage.getItem("token");
   const { user, dispatch } = useContext(AuthContext);
   useEffect(() => {
-    console.log("asd");
     getUser(dispatch);
   }, []);
 
@@ -31,12 +30,9 @@ function App() {
       return false;
     }
     const { exp } = decode(token);
-    console.log(exp);
-    console.log(new Date().getTime());
+
     try {
       const { exp } = decode(token);
-      console.log(exp);
-      console.log(new Date().getTime());
 
       if (exp * 1000 < new Date().getTime()) {
         localStorage.removeItem("token");
@@ -49,11 +45,11 @@ function App() {
       return false;
     }
   };
-  console.log(user);
+
   return (
     <Router>
       <Switch>
-        <Route path="/messanger">
+        <Route path="/messanger/:id?">
           <Messanger />
         </Route>
 

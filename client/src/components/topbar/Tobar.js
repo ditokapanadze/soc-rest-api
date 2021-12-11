@@ -24,7 +24,7 @@ export default function Topbar() {
     history.push("/login");
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/auth/logout/${userId}`
+        `https://socmedia-rest.herokuapp.com/api/auth/logout/${userId}`
       );
     } catch (err) {}
   };
@@ -40,7 +40,7 @@ export default function Topbar() {
       document.removeEventListener("click", handleClick);
     };
   }, [showPopup]);
-  console.log(user);
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -65,15 +65,15 @@ export default function Topbar() {
         </div>
         <div className="topbarIcons">
           <div className="topbarIconItem">
-            <Person />
+            <Person className="topbarIcon" />
             <span className="topbarIconBadge">1</span>
           </div>
           <div className="topbarIconItem">
-            <Chat />
+            <Chat className="topbarIcon" />
             <span className="topbarIconBadge">2</span>
           </div>
           <div className="topbarIconItem">
-            <Notifications />
+            <Notifications className="topbarIcon" />
             <span className="topbarIconBadge">1</span>
           </div>
         </div>
@@ -103,11 +103,11 @@ export default function Topbar() {
 
               <li className="topbar__li">
                 {" "}
-                <AiFillSetting /> <p>Edit your info </p>
+                <AiFillSetting className="topbarIcon" /> <p>Edit your info </p>
               </li>
               <li onClick={handleLogout} className="topbar__li">
                 {" "}
-                <GoSignOut />
+                <GoSignOut className="topbarIcon" />
                 <p> Log Out</p>
               </li>
             </ul>

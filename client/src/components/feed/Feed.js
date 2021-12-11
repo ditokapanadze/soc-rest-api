@@ -11,7 +11,7 @@ export default function Feed({ username }) {
   const [post, setPost] = useState([]);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
-  console.log(user);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -22,13 +22,13 @@ export default function Feed({ username }) {
         //     );
         if (username) {
           const res = await axios.get(
-            "http://localhost:5000/api/posts/profile/" + username
+            "https://socmedia-rest.herokuapp.com/api/posts/profile/" + username
           );
 
           setPosts(res.data);
         } else {
           const res = await axios.get(
-            "http://localhost:5000/api/posts/timeline/" + user._id
+            "https://socmedia-rest.herokuapp.com/api/posts/timeline/" + user._id
           );
           setPosts(res.data);
         }
@@ -48,7 +48,9 @@ export default function Feed({ username }) {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+        const res = await axios.get(
+          `https://socmedia-rest.herokuapp.com/api/posts/${id}`
+        );
         setPost(res.data);
       } catch (err) {
         console.log(err);

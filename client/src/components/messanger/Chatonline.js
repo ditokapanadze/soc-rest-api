@@ -2,17 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "./chatonline.css";
 
-function Chatonline({ onlineUsers, currentId, setCurrentChat }) {
+function Chatonline({ friend }) {
   const [friends, setFriends] = useState([]);
   const [onlieFriends, setOnlineFriends] = useState([]);
-
-  useEffect(() => {
-    const getFriends = async () => {
-      const res = await axios.get(
-        `http://localhost:5000/users/friends${currentId}`
-      );
-    };
-  }, []);
 
   return (
     <div className="chatOnline">
@@ -23,9 +15,10 @@ function Chatonline({ onlineUsers, currentId, setCurrentChat }) {
             src="https://res.cloudinary.com/dr7mu778b/image/upload/v1636802655/noAvatar_fqthh6.png"
             alt=""
           />
-          <div className="chatOnlineBadge"></div>
         </div>
-        <span className="chatOnlineName">Jon doe</span>
+        <p className="chatOnlineName">{friend.username}</p>
+        <p className="chatOnlineName">lives: {friend.city}</p>
+        <p className="chatOnlineName">from: {friend.from}</p>
       </div>
     </div>
   );

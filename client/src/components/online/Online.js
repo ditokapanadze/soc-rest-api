@@ -5,14 +5,14 @@ import React, { useState, useEffect } from "react";
 export default function Online({ userId }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friend, setFriend] = useState([]);
-  console.log(userId);
+  console.log("DDDDDD");
   useEffect(() => {
     const fetchFriend = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users/?userId=${userId}`
+          `https://socmedia-rest.herokuapp.com/api/users/?userId=${userId}`
         );
-        console.log(res.data);
+
         setFriend(res.data);
       } catch (err) {}
     };

@@ -21,11 +21,11 @@ export default function Comments({
   const scrollRef = useRef();
 
   const { id } = useParams();
+
   const handleSubmit = async (e) => {
     // console.log(singlePost._id);
 
     if (e.which === 13 && !e.shiftKey && commentText.trim() !== "") {
-      console.log(commentText.length);
       e.preventDefault();
       const info = {
         commentText,
@@ -34,15 +34,15 @@ export default function Comments({
       };
       let id;
       postId ? (id = postId) : (id = singlePost._id);
-      console.log(id);
+
       try {
         const res = await axios.put(
-          `http://localhost:5000/api/posts/comment/${user._id}/${id}`,
+          `https://socmedia-rest.herokuapp.com/api/posts/comment/${user._id}/${id}`,
           { info }
         );
+        console.log(res.data);
         postId ? fetchPost(postId) : fetchPost();
         setCommentText("");
-        console.log(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -54,10 +54,9 @@ export default function Comments({
   });
 
   const onEmojiClick = (event, emojiObject) => {
-    console.log(emojiObject.emoji);
     setCommentText(commentText + emojiObject.emoji);
   };
-  console.log();
+
   return (
     <div
       className={

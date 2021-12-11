@@ -12,7 +12,7 @@ export default function Share() {
   const [postImage, setPostImage] = useState("");
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  console.log(desc);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData();
@@ -24,11 +24,14 @@ export default function Share() {
     //   userId: user._id,
     //   desc,
     // };
-    console.log(formData);
+
     if (postImage) {
     }
     try {
-      const res = await axios.post("http://localhost:5000/api/posts", formData);
+      const res = await axios.post(
+        "https://socmedia-rest.herokuapp.com/api/posts",
+        formData
+      );
       window.location.reload(); // ეს დორებითია. კონტექსტი უნდა შევქმნა მერე და პოსტები სთეითად გავიტანო
     } catch (err) {
       console.log(err);

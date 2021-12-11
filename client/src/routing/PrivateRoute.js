@@ -8,8 +8,6 @@ const checkAuth = () => {
   }
   try {
     const { exp } = decode(token);
-    console.log(exp);
-    console.log(new Date().getTime());
 
     if (exp * 1000 < new Date().getTime()) {
       localStorage.removeItem("token");
@@ -22,7 +20,7 @@ const checkAuth = () => {
     return false;
   }
 };
-console.log(checkAuth());
+
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route

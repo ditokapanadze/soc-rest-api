@@ -8,16 +8,21 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Add, Remove } from "@material-ui/icons";
 import { getUser } from "../../apiCalls";
+import HomeRightBar from "./HomeRightBar";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import Messanger from "../messanger/Messanger";
+import MessangerPopup from "../mesengerPopup/MessangerPopup";
 
-export default function Rightbar({ user }) {
+export const Rightbar = ({ user }) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
+  const [showChat, setShowChat] = useState(false);
   const [followed, setFollowed] = useState();
   const [cityInput, setCityInput] = useState(false);
   const [fromInput, setFromInput] = useState(false);
-
   const [editInfo, setEditInfo] = useState("");
+  // const [showChat, setShowChat] = useState(false);
+  const [friendId, setFriendId] = useState();
   const { user: currentUser, dispatch } = useContext(AuthContext);
   const inputRef = useRef(null);
   // ვამოწმებს ფლოლოუერებში გვყავს თუ არა ეს პროფილი რო მაგის მიხედვით ფოლოუ და ანფოლოა ღილაკი დარენდერდეს
@@ -25,18 +30,17 @@ export default function Rightbar({ user }) {
     setFollowed(currentUser?.following?.includes(user?._id));
   }, [user?._id]);
 
-  console.log(currentUser);
   const handleFollow = async () => {
     try {
       if (user?.followers.includes(currentUser?._id)) {
         const res = await axios.put(
-          `http://localhost:5000/api/users/${user?._id}/unfollow`,
+          `https://socmedia-rest.herokuapp.com/api/users/${user?._id}/unfollow`,
           { userId: currentUser._id }
         );
         getUser(dispatch);
       } else {
         const res = await axios.put(
-          `http://localhost:5000/api/users/${user?._id}/follow`,
+          `https://socmedia-rest.herokuapp.com/api/users/${user?._id}/follow`,
           { userId: currentUser._id }
         );
         getUser(dispatch);
@@ -50,9 +54,9 @@ export default function Rightbar({ user }) {
     const fetchFriends = async () => {
       try {
         const firendList = await axios.get(
-          `http://localhost:5000/api/users/friends/${currentUser._id}`
+          `https://socmedia-rest.herokuapp.com/api/users/friends/${currentUser._id}`
         );
-        console.log(firendList);
+
         setFriends(firendList.data);
       } catch (err) {
         console.log(err);
@@ -61,45 +65,20 @@ export default function Rightbar({ user }) {
     fetchFriends();
   }, [user]);
 
-  const HomeRightbar = () => {
-    return (
-      <>
-        <div className="birthdayContainer">
-          <img className="birthdayImg" src="assets/gift.png" alt="" />
-          <span className="birthdayText">
-            <b>Pola Foster</b> and <b>3 other friends</b> have a birhday today.
-          </span>
-        </div>
-        <img className="rightbarAd" src={`${PF}ad.png`} alt="" />
-        <h4 className="rightbarTitle">Online Friends</h4>
-        <ul className="rightbarFriendList">
-          {currentUser?.following.map((id) => (
-            <Online key={id} userId={id} />
-          ))}
-        </ul>
-      </>
-    );
-  };
+  const handleClick = (x) => {};
 
-  const handleClick = (x) => {
-    console.log(x.target);
-  };
-  // const handleClick = () => {
-  //   console.log(inputRef.current.valu);
   // };
-  const handleChange = () => {
-    console.log(inputRef.current.name);
-  };
+  const handleChange = () => {};
   const handleSubmit = async (e) => {
     e.preventDefault();
     let test = inputRef.current.name;
     const token = localStorage.getItem("token");
     let editAdress = {};
     editAdress[inputRef.current.name] = inputRef.current.value;
-    console.log(editAdress);
+
     try {
       const res = await axios.put(
-        "http://localhost:5000/api/users/changeInfo",
+        "https://socmedia-rest.herokuapp.com/api/users/changeInfo",
         { editAdress },
         {
           headers: {
@@ -113,11 +92,9 @@ export default function Rightbar({ user }) {
     setCityInput(false);
     setFromInput(false);
     getUser(dispatch);
-
-    console.log("currentUser");
   };
-  console.log(currentUser?.username);
-  console.log(user?.username);
+  console.log("test");
+
   const ProfileRightbar = () => {
     return (
       <>
@@ -249,11 +226,26 @@ export default function Rightbar({ user }) {
       </>
     );
   };
+  console.log(friendId);
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
-        {user ? <ProfileRightbar /> : <HomeRightbar />}
+        {user ? (
+          <ProfileRightbar />
+        ) : (
+          <HomeRightBar
+            showChat={showChat}
+            setShowChat={setShowChat}
+            setFriendId={setFriendId}
+          />
+        )}
+        {/* <HomeRightBar /> */}
+        {showChat ? (
+          <Messanger small x={friendId} setShowChat={setShowChat} />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
-}
+};

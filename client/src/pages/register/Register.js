@@ -15,10 +15,8 @@ function Register() {
   const { user, isFetching, error, dispatch } = useContext(AuthContext);
 
   const history = useHistory();
-  console.log(error);
+
   const handleClick = async (e) => {
-    console.log(password);
-    console.log(repassword);
     e.preventDefault();
     if (password !== repassword) {
       passwordRef.current.setCustomValidity("passwords don't match");
