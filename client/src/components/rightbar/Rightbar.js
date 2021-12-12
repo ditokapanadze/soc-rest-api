@@ -106,7 +106,7 @@ export const Rightbar = ({ user }) => {
         ) : (
           ""
         )}
-        <h4 className="rightbarTitle">User information</h4>
+        {/* <h4 className="rightbarTitle">User information</h4> */}
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
             <div className="info__container">
@@ -149,21 +149,18 @@ export const Rightbar = ({ user }) => {
               <span className="rightbarInfoKey">From:</span>
               <span className="rightbarInfoValue">{user.from}</span>
             </div>
-            {/* {showInput ? (
-              <form type="submit">
-                {" "}
-                <input ref={inputRef} name="from" onChange={handleChange} />
-              </form>
-            ) : (
-              ""
-            )} */}
 
             {currentUser?._id === user?._id ? (
-              <div>
+              <div className="test">
                 {fromInput ? (
                   <form type="submit" onSubmit={handleSubmit}>
                     {" "}
-                    <input ref={inputRef} name="from" onChange={handleChange} />
+                    <input
+                      style={{ marginRight: "50px", marginLeft: "15px" }}
+                      ref={inputRef}
+                      name="from"
+                      onChange={handleChange}
+                    />
                   </form>
                 ) : (
                   ""
@@ -206,6 +203,7 @@ export const Rightbar = ({ user }) => {
             )}
           </div>
         </div>
+
         <h4 className="rightbarTitle">User friends</h4>
         <div className="rightbarFollowings">
           {friends.map((friend) => (

@@ -17,7 +17,7 @@ export default function Comments({
   const [commentText, setCommentText] = useState("");
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [emojiVisible, setEmojiVisible] = useState(false);
-
+  console.log(emojiVisible);
   const scrollRef = useRef();
 
   const { id } = useParams();
@@ -43,6 +43,7 @@ export default function Comments({
         console.log(res.data);
         postId ? fetchPost(postId) : fetchPost();
         setCommentText("");
+        setEmojiVisible(false);
       } catch (err) {
         console.log(err);
       }
@@ -101,15 +102,18 @@ export default function Comments({
         </div>
       ))} */}
       <div className="form__container">
-        <img className="comments__img" src={user.profilePicture} />
-        <SentimentSatisfiedIcon
-          className="emoji__icon"
-          onClick={() => setEmojiVisible(!emojiVisible)}
-        />
+        {!singlePost && (
+          <img className="comments__img" src={user.profilePicture} />
+        )}
+
         <form
           type="submit"
           className={singlePost ? "comment__form" : "small__form"}
         >
+          <SentimentSatisfiedIcon
+            className="emoji__icon"
+            onClick={() => setEmojiVisible(!emojiVisible)}
+          />
           <textarea
             required
             onChange={(e) => setCommentText(e.target.value)}
