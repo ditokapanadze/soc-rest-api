@@ -1,5 +1,9 @@
 import "./sidebar.css";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+
 import { Users } from "../../dummyData";
+import axios from "axios";
 
 import {
   RssFeed,
@@ -16,6 +20,22 @@ import {
 import CloseFriend from "../closeFriend/CloseFriend";
 
 export default function Sidebar() {
+  const [users, setUsers] = useState([]);
+
+  const { user: currentUser, largeMode, dispatch } = useContext(AuthContext);
+  console.log(currentUser);
+  useEffect(() => {
+    const getUSers = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/users/allusers");
+        setUsers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUSers();
+  }, []);
+  console.log(currentUser?._id);
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -61,9 +81,21 @@ export default function Sidebar() {
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
           <p>People you may know </p>
-          {Users.map((u) => (
-            <CloseFriend key={u.id} user={u} />
-          ))}
+          {/* {users.map((u) =>
+            !u.followers.some(currentUser?._id) ? (
+              <CloseFriend key={u.id} user={u} />
+            ) : (
+              ""
+            )
+          )} */}
+          {users.map((u) => {
+            if (
+              !u.followers.some((follower) => follower === currentUser?._id) &&
+              u._id !== currentUser?._id
+            ) {
+              return <CloseFriend key={u.id} user={u} />;
+            }
+          })}
         </ul>
       </div>
     </div>

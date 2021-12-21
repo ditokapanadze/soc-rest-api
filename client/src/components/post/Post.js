@@ -196,13 +196,14 @@ export default function Post({ post, large }) {
       ) : (
         <div className="large__wrapper">
           <HighlightOffIcon
+            className="close__icon"
             onClick={() => history.goBack()}
-            style={{
-              color: "white",
-              marginLeft: "20px",
-              fontSize: "30px",
-              cursor: "pointer",
-            }}
+            // style={{
+            //   color: "white",
+            //   marginLeft: "20px",
+            //   fontSize: "30px",
+            //   cursor: "pointer",
+            // }}
           />
           <div className="largepost__imgcontainer">
             {/* <span className="postText">{post?.desc}</span> */}

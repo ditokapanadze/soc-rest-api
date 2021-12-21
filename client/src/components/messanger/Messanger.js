@@ -80,7 +80,7 @@ function Messanger({ small, x, setShowChat, showChat }) {
         const res = await axios
           .get(`http://localhost:5000/api/conversations/convo/${id}`)
           .then((res) => {
-            seCurrentChat(res.data);
+            getCoversation(res.data);
 
             friendId = res.data.members.filter((x) => x !== user?._id);
           });
@@ -121,7 +121,7 @@ function Messanger({ small, x, setShowChat, showChat }) {
     const message = {
       sender: user._id,
       text: newMessage,
-      conversationId: currentChat._id,
+      conversationId: currentChat?._id,
     };
     console.log(message);
     const receiverId = currentChat.members.find(
@@ -152,6 +152,7 @@ function Messanger({ small, x, setShowChat, showChat }) {
   }, [messages]);
 
   const handleClick = (c) => {
+    console.log("Asdasd");
     seCurrentChat(c);
     history.push(`/messanger/${c._id}`);
     const friendId = c.members.filter((member) => member !== user?._id);
@@ -168,17 +169,20 @@ function Messanger({ small, x, setShowChat, showChat }) {
 
   useEffect(() => {
     let chetId;
+
+    console.log("aqaa");
     if (x) {
       const getConversations = async () => {
         try {
           const res = await axios.get(
-            `https://socmedia-rest.herokuapp.com/api/conversations/${user?._id}`
+            `http://localhost:5000/api/conversations/${user?._id}`
           );
-
+          console.log(user?._id);
+          console.log(res);
           res.data.forEach((convo) => {
             if (convo.members.includes(x)) {
               seCurrentChat(convo);
-
+              console.log("Aqaa");
               chetId = convo._id;
             }
           });
@@ -216,7 +220,7 @@ function Messanger({ small, x, setShowChat, showChat }) {
       sendMesssage(e);
     }
   };
-
+  console.log(currentChat);
   return (
     <div className={small ? "messanger smallMessanger" : `messanger`}>
       <div className={small ? "hidden" : "chatMenu"}>

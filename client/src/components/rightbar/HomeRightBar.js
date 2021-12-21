@@ -9,6 +9,11 @@ function HomeRightBar({ setShowChat, setFriendId }) {
   const { user: currentUser, dispatch } = useContext(AuthContext);
 
   console.log("render");
+  const handleClick = (id) => {
+    setFriendId(id);
+    setShowChat(true);
+    console.log("click");
+  };
   return (
     <>
       <div className="birthdayContainer">
@@ -26,11 +31,7 @@ function HomeRightBar({ setShowChat, setFriendId }) {
             style={{ cursor: "pointer" }}
             className="test"
             key={id}
-            onClick={() => {
-              setFriendId(id);
-              setShowChat(true);
-              console.log("click");
-            }}
+            onClick={() => handleClick(id)}
           >
             <Online userId={id} />
           </div>

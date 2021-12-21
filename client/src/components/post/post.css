@@ -207,3 +207,23 @@
   max-height: 25vh;
   overflow-y: scroll;
 }
+.large__wrapper {
+}
+.close__icon {
+  color: white;
+  margin-left: 20px;
+  font-size: 30px !important;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+  .large__wrapper {
+    flex-direction: column !important;
+  }
+  .large {
+    display: inline-block;
+  }
+  .largepost__right {
+    margin-right: 0;
+  }
+}
