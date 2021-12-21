@@ -34,7 +34,7 @@ function Messanger({ small, x, setShowChat, showChat }) {
       });
     });
   }, []);
-
+  console.log(x);
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
@@ -254,7 +254,14 @@ function Messanger({ small, x, setShowChat, showChat }) {
               </div>
             </div>
           </Link>
-          <IoClose onClick={() => setShowChat(false)} className="CloseIcon" />
+          <IoClose
+            onClick={() => {
+              localStorage.removeItem("showChat");
+              localStorage.removeItem("friendId");
+              setShowChat(false);
+            }}
+            className="CloseIcon"
+          />
         </div>
 
         <div

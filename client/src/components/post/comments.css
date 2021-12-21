@@ -65,10 +65,7 @@
   display: flex;
   justify-content: space-around;
 }
-.small__form .emoji-picker-react {
-}
-.small__form textarea {
-}
+
 .comments__img {
   width: 30px;
   height: 30px;
@@ -83,4 +80,16 @@
 .emoji__icon {
   position: absolute;
   font-size: 2rem !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .larg__coment__container {
+    height: 320px !important;
+  }
+  .comment__form {
+    bottom: -40px;
+    width: 98%;
+  }
+}
+@media screen and (max-width: 768px) {
 }

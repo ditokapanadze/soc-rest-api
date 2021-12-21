@@ -13,6 +13,8 @@ function HomeRightBar({ setShowChat, setFriendId }) {
     setFriendId(id);
     setShowChat(true);
     console.log("click");
+    localStorage.setItem("showChat", true);
+    localStorage.setItem("friendId", id);
   };
   return (
     <>

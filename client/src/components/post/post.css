@@ -227,3 +227,8 @@
     margin-right: 0;
   }
 }
+@media screen and (max-width: 768px) {
+  .largepost__imgcontainer img {
+    max-height: 480px;
+  }
+}

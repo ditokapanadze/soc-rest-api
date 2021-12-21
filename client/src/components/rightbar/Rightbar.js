@@ -16,7 +16,9 @@ import MessangerPopup from "../mesengerPopup/MessangerPopup";
 export const Rightbar = ({ user }) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(
+    localStorage.getItem("showChat") || false
+  );
   const [followed, setFollowed] = useState();
   const [cityInput, setCityInput] = useState(false);
   const [fromInput, setFromInput] = useState(false);
@@ -224,7 +226,7 @@ export const Rightbar = ({ user }) => {
       </>
     );
   };
-  console.log(friendId);
+  console.log(showChat);
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
@@ -239,7 +241,11 @@ export const Rightbar = ({ user }) => {
         )}
         {/* <HomeRightBar /> */}
         {showChat ? (
-          <Messanger small x={friendId} setShowChat={setShowChat} />
+          <Messanger
+            small
+            x={localStorage.getItem("friendId")}
+            setShowChat={setShowChat}
+          />
         ) : (
           ""
         )}
