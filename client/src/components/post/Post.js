@@ -132,8 +132,10 @@ export default function Post({ post, large }) {
               <Link to={`/profile/${user?.username}`}>
                 <img className="postProfileImg" src={user?.profilePicture} />
               </Link>
-              <span className="postUsername">{user?.username}</span>
-              <span className="postDate">{format(post.createdAt)}</span>
+              <span style={{ opacity: "0.9" }} className="postUsername">
+                {user?.username} &#8226; {format(post.createdAt)}
+              </span>
+              {/* <span className="postDate">- {format(post.createdAt)}</span> */}
             </div>
             <div className="postTopRight">
               <MoreVert />

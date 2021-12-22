@@ -1,11 +1,15 @@
-const io = require("socket.io")(8900, {
+const dotenv = require("dotenv");
+
+dotenv.config();
+console.log(process.env.PORT);
+const io = require("socket.io")(process.env.PORT || 8900, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://metasocial-fec97.web.app",
   },
 });
 
 let users = [];
-
+console.log("tset");
 const addUser = (userId, socketId) => {
   !users.some((user) => user.userId === userId) &&
     users.push({ userId, socketId });
@@ -30,6 +34,7 @@ io.on("connection", (socket) => {
 
   //send and get message
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+    console.log(text);
     const user = getUser(receiverId);
     io.to(user?.socketId).emit("getMessage", {
       senderId,

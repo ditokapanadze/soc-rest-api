@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 export default function Online({ userId }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friend, setFriend] = useState([]);
-  console.log("DDDDDD");
+  console.log(friend);
   useEffect(() => {
     const fetchFriend = async () => {
       try {

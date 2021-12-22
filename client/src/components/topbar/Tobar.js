@@ -46,7 +46,7 @@ export default function Topbar() {
       <div className="topbarLeft">
         <Link to="/">
           {" "}
-          <span className="logo">Lamasocial</span>
+          <span className="logo">MetaSocial</span>
         </Link>
       </div>
       <div className="topbarCenter">

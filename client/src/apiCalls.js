@@ -53,7 +53,7 @@ export const register = async (user, dispatch) => {
   dispatch({ type: "LOGIN_START" });
   try {
     const res = await axios.post(
-      "http://localhost:5000/api/auth/register",
+      "https://socmedia-rest.herokuapp.com/api/auth/register",
       user
     );
     localStorage.setItem("token", res.data.token);

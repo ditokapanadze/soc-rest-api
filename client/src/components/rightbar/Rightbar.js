@@ -58,7 +58,7 @@ export const Rightbar = ({ user }) => {
         const firendList = await axios.get(
           `https://socmedia-rest.herokuapp.com/api/users/friends/${currentUser._id}`
         );
-
+        console.log(firendList);
         setFriends(firendList.data);
       } catch (err) {
         console.log(err);
@@ -95,7 +95,7 @@ export const Rightbar = ({ user }) => {
     setFromInput(false);
     getUser(dispatch);
   };
-  console.log("test");
+  console.log(friends);
 
   const ProfileRightbar = () => {
     return (
@@ -114,7 +114,12 @@ export const Rightbar = ({ user }) => {
             <div className="info__container">
               {" "}
               <span className="rightbarInfoKey">City:</span>
-              <span className="rightbarInfoValue">{user.city}</span>
+              <span
+                style={{ fontWeight: "bold" }}
+                className="rightbarInfoValue"
+              >
+                {user.city}
+              </span>
             </div>
             {cityInput ? (
               <form type="submit" onSubmit={handleSubmit}>
@@ -149,7 +154,12 @@ export const Rightbar = ({ user }) => {
           <div className="rightbarInfoItem">
             <div className="info__container">
               <span className="rightbarInfoKey">From:</span>
-              <span className="rightbarInfoValue">{user.from}</span>
+              <span
+                style={{ fontWeight: "bold" }}
+                className="rightbarInfoValue"
+              >
+                {user.from}
+              </span>
             </div>
 
             {currentUser?._id === user?._id ? (
@@ -208,11 +218,14 @@ export const Rightbar = ({ user }) => {
 
         <h4 className="rightbarTitle">User friends</h4>
         <div className="rightbarFollowings">
-          {friends.map((friend) => (
-            <Link to={`/profile/${friend?.username}`}>
+          {friends?.map((friend) => (
+            <Link
+              style={{ margin: "10px" }}
+              to={`/profile/${friend?.username}`}
+            >
               <div className="rightbarFollowing">
                 <img
-                  src={friend.profilePicture}
+                  src={friend?.profilePicture}
                   alt=""
                   className="rightbarFollowingImg"
                 />

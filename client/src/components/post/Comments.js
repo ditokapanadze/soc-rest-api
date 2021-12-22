@@ -1,5 +1,5 @@
 import { CommentTwoTone, PermDataSettingOutlined } from "@material-ui/icons";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
 import "./comments.css";
@@ -20,7 +20,7 @@ export default function Comments({
   console.log(emojiVisible);
   const scrollRef = useRef();
 
-  const { id } = useParams();
+  const { user: currentUser } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     // console.log(singlePost._id);
@@ -103,7 +103,7 @@ export default function Comments({
       ))} */}
       <div className="form__container">
         {!singlePost && (
-          <img className="comments__img" src={user.profilePicture} />
+          <img className="comments__img" src={currentUser.profilePicture} />
         )}
 
         <form

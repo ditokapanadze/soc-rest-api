@@ -27,7 +27,9 @@ export default function Sidebar() {
   useEffect(() => {
     const getUSers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/users/allusers");
+        const res = await axios.get(
+          "https://socmedia-rest.herokuapp.com/api/users/allusers"
+        );
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -35,7 +37,7 @@ export default function Sidebar() {
     };
     getUSers();
   }, []);
-  console.log(currentUser?._id);
+  console.log(users);
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">

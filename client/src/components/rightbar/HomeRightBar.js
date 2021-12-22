@@ -25,13 +25,12 @@ function HomeRightBar({ setShowChat, setFriendId }) {
         </span>
       </div>
 
-      <h4 className="rightbarTitle">Online Friends</h4>
+      <h4 className="rightbarTitle">Friends</h4>
 
       <ul className="rightbarFriendList">
         {currentUser?.following.map((id) => (
           <div
             style={{ cursor: "pointer" }}
-            className="test"
             key={id}
             onClick={() => handleClick(id)}
           >

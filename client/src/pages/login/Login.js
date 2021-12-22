@@ -15,15 +15,15 @@ function Login() {
     loginCall({ email, password }, dispatch);
     history.push("/");
   };
-
+  // asasdas
   return (
     <div className="login">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <h3 className="loginLogo">Lamasocial</h3>
+          <h3 className="loginLogo">MetaSocial</h3>
           <span className="loginDesc">
             {" "}
-            Connect with friend and the word around you on Lamasocial
+            Connect with friend and the word around you on MetaSocial
           </span>
         </div>
         <div className="loginRight">

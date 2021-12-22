@@ -24,8 +24,9 @@ function Messanger({ small, x, setShowChat, showChat }) {
   const { id } = useParams();
   let history = useHistory();
   console.log(x);
+
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
+    socket.current = io("https://socmediachat-socket.herokuapp.com");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -78,7 +79,9 @@ function Messanger({ small, x, setShowChat, showChat }) {
     const getCoversation = async () => {
       try {
         const res = await axios
-          .get(`http://localhost:5000/api/conversations/convo/${id}`)
+          .get(
+            `https://socmedia-rest.herokuapp.com/api/conversations/convo/${id}`
+          )
           .then((res) => {
             getCoversation(res.data);
 
@@ -175,7 +178,7 @@ function Messanger({ small, x, setShowChat, showChat }) {
       const getConversations = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:5000/api/conversations/${user?._id}`
+            `https://socmedia-rest.herokuapp.com/api/conversations/${user?._id}`
           );
           console.log(user?._id);
           console.log(res);
@@ -194,7 +197,7 @@ function Messanger({ small, x, setShowChat, showChat }) {
       const getMessages = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:5000/api/messages/${chetId}`
+            `https://socmedia-rest.herokuapp.com/api/messages/${chetId}`
           );
 
           setMessages(res.data);
